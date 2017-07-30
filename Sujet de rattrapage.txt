@@ -1,0 +1,19 @@
+sujet de rattrapage :
+Etant accroc à la musique je voulais mélanger ce projet avec ma passion :
+- Un logiciel comme Spotify : application qui permet de partager et d'écouter des musiques gratuitement avec plusieurs fonctionnalitées comme :
+	1. Inscription / Connexion
+	2. Gestion du profil
+	3. Affichage de musique sur la page d'accueil 
+	4. Écoutez des musiques sur la platform en allant chercher en bdd les musiques correspondantes
+	5. Lecteur de musique pause stop modification du volume etc...
+	6. Upload de musique sur la platform
+	7. Upload d'un clip de musique sur la platform 
+	8. Like Dislike Signaler et peut-etre ( critiquez une musique )
+
+- Un backend seulement pour les administrateurs :
+	1. Meme fonctionnalité que les utilisateurs normaux
+	2. Ajout de contenu musique clip etc...	
+	3. Suppression d'une musique ou d'un clip inaproprié signalé par les utilisateurs
+	4. Bannisement d'un utilisateur
+
+fsananes@esgi.fr
