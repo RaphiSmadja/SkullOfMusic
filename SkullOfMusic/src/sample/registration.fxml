@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Registration">
+   <children>
+      <Button fx:id="btnValidate" layoutX="50.0" layoutY="658.0" mnemonicParsing="false" onAction="#pressButtonValidate" text="Validate" />
+      <Button fx:id="btnBack" layoutX="924.0" layoutY="658.0" mnemonicParsing="false" onAction="#pressButtonBack" text="Back" />
+      <Label text="Name" />
+      <TextField fx:id="fieldsName" layoutX="200.0" layoutY="6.0" />
+      <Label text="Surname" layoutY="56.0"/>
+      <TextField fx:id="fieldsSurname" layoutX="200.0" layoutY="56.0"/>
+      <Label text="Email" layoutY="106.0"/>
+      <TextField fx:id="fieldsEmail" layoutX="200.0" layoutY="106.0"/>
+      <Label text="Confirmation Email" layoutY="156.0"/>
+      <TextField fx:id="fieldsConfirmEmail" layoutX="200.0" layoutY="156.0"/>
+      <Label text="Password" layoutY="206.0"/>
+      <TextField fx:id="fieldsPassword" layoutX="200.0" layoutY="206.0"/>
+      <Label text="Confirmation password" layoutY="256.0"/>
+      <TextField fx:id="fieldsConfirmPassword" layoutX="200.0" layoutY="256.0"/>
+      <Label text="Pseudo" layoutY="306.0"/>
+      <TextField fx:id="fieldsPseudo" layoutX="200.0" layoutY="306.0"/>
+   </children>
+</AnchorPane>
