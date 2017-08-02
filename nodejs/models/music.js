@@ -10,7 +10,7 @@ module.exports = function(sequelize, DataTypes) {
 		ownerIdMusic: {
 			type: DataTypes.BIGINT
 		},
-		Title: {
+		title: {
 			type: DataTypes.STRING
 		},
 		artist: {

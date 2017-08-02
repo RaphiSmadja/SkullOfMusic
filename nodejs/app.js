@@ -9,6 +9,7 @@ const express_session = require('express-session');
 const index = require('./routes/index');
 const users = require("./routes/users");
 const music = require("./routes/music");
+const likeUnlike = require("./routes/likeUnlike");
 
 const models = require("./models");
 models.sequelize.sync();
@@ -39,6 +40,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use("/users", users);
+app.use("/music", music);
+app.use("/likeUnlike", likeUnlike);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

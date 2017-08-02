@@ -13,10 +13,8 @@ let sess;
 
 router.post("/login", function(req, res, next) {
 	res.type("json");
-
 	let emailSend = req.body.emailAddress1;
 	let passwordSend = req.body.password1;
-
 	User.find({
 		where: {
 			emailAddress: emailSend
@@ -30,6 +28,7 @@ router.post("/login", function(req, res, next) {
                     sess.firstName = user.firstName;
            			sess.lastName = user.lastName;
 					sess.emailAddress = user.emailAddress;
+					sess.isAdmin = user.isAdmin;
 					res.json({Session: sess, User: user, msg: 'you are connected'});
 			    	} else
 					res.json({msg: 'wrong login infos'});
@@ -39,12 +38,10 @@ router.post("/login", function(req, res, next) {
 	}).catch(err => { res.json({msg: 'nok', err: err}); });
 });
 
-router.post("/logout", function(req, res, next) {
+router.get("/logout", function(req, res, next) {
 	res.type("json");
 	sess = req.session;
 	if(!sess.emailAddress){
-		console.log(sess.emailAddress1);
-		console.log(sess.emailAddress);
 		res.json({ msg: 'you are not connected so you can\'t you connected '});
 	} else {
 		console.log(sess.emailAddress);
@@ -95,14 +92,12 @@ router.post("/registration", (req, res, next) => {
 			});
 		} else {
 			User.create({
-				handle: "",
+				pseudo: "",
 				emailAddress: req.body.emailAddress1,
 				lastName: "",
 				firstName: "",
-				phoneNumber: "",
-				newsletter: false,
-				picture: "",
 				hashedPassword: bcrypt.hashSync(req.body.password1, 5),
+				picture: "",
 				isAdmin: 0
 			}).then(user => {
 				if (user) {
@@ -209,37 +204,6 @@ router.post("/edit", (req, res, next) => {
 	}).catch(err => {
 		res.json({
 			message: 'Unable to edit user',
-			err: err
-		});
-	});
-});
-
-router.post("/resetPassword", (req, res, next) => {
-	res.type("json");
-
-	User.findOne({
-		where: {
-			emailAddress: req.body.emailAddress
-		}
-	}).then(user => {
-		if (user) {
-			const newPassword = randomPassword.String_random(/[\w]{10}/);
-
-			user.updateAttributes({
-				hashedPassword: bcrypt.hashSync(newPassword, 5)
-			});
-
-			res.json({
-				message: "Password has changed",
-				newPassword: newPassword
-			});
-		} else {
-			res.json({
-				message: "User doesn't exists"
-			});
-		}
-	}).catch(err => {
-		res.json({
 			err: err
 		});
 	});
