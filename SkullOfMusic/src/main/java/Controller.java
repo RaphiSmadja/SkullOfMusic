@@ -1,4 +1,3 @@
-package sample;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +10,7 @@ import static javafx.application.Platform.exit;
 public class Controller {
 
     public void pressButtonRegistration(ActionEvent actionEvent) throws IOException {
-        Main.root = FXMLLoader.load(getClass().getResource("registration.fxml"));
+        Main.root = FXMLLoader.load(getClass().getResource("Fxmlnterface/registration.fxml"));
         Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 

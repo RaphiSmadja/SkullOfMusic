@@ -1,4 +1,3 @@
-package sample;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +14,7 @@ public class Registration {
     }
 
     public void pressButtonBack(ActionEvent actionEvent) throws IOException {
-        Main.root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Main.root = FXMLLoader.load(getClass().getResource("Fxmlnterface/sample.fxml"));
         Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 }

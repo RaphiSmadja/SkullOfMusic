@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/SkullOfMusic.iml" filepath="$PROJECT_DIR$/SkullOfMusic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SkullOfMusicMaven.iml" filepath="$PROJECT_DIR$/SkullOfMusicMaven.iml" />
     </modules>
   </component>
 </project>

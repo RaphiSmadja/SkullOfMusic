@@ -1,4 +1,3 @@
-package sample;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,11 +15,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.primaryStage = primaryStage;
-        root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/Fxmlnterface/sample.fxml"));
         primaryStage.setTitle("Skull Of Music");
         primaryStage.setScene(new Scene(root, 1024, 768));
         primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image("file:/../ressources/logo.png"));
+        primaryStage.getIcons().add(new Image("/ressources/logo.png"));
         primaryStage.show();
     }
 
