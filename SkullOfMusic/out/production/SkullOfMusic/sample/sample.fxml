@@ -13,7 +13,7 @@
       <Button fx:id="btnLeave" layoutX="368.0" layoutY="396.0" mnemonicParsing="false" onAction="#pressButtonLeave" text="Leave" />
       <ImageView fitHeight="149.0" fitWidth="213.0" layoutX="6.0" layoutY="6.0">
          <image>
-            <Image url="@../ressources/logo_skull.png" />
+            <Image url="@../ressources/img/logo_skull.png" />
          </image>
       </ImageView>
    </children>

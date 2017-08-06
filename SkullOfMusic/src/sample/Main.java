@@ -11,7 +11,7 @@ public class Main extends Application {
     public static Parent root;
     public static Stage primaryStage;
     public static String ipServeur="127.0.0.1";
-    public static int portServeur=3791;
+    public static int portServeur=3002;
 
     @Override
     public void start(Stage primaryStage) throws Exception{

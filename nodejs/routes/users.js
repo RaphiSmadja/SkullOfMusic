@@ -55,8 +55,8 @@ router.get("/logout", function(req, res, next) {
 });
 
 router.post("/registration", (req, res, next) => {
+	console.log("registration");
 	res.type("json");
-
 	if (!validator.isEmail(req.body.emailAddress1)) {
 		res.json({
 			message: "It's not a mail address"

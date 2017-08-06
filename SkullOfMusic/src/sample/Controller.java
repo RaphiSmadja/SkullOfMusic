@@ -8,6 +8,9 @@ import java.io.IOException;
 
 import static javafx.application.Platform.exit;
 
+/**
+ * Created by raphi on 06/08/2017.
+ */
 public class Controller {
 
     public void pressButtonRegistration(ActionEvent actionEvent) throws IOException {
@@ -16,15 +19,12 @@ public class Controller {
     }
 
     public void pressButtonConnection(ActionEvent actionEvent) {
-
     }
 
     public void pressButtonHelp(ActionEvent actionEvent) {
-
     }
 
     public void pressButtonLeave(ActionEvent actionEvent) {
         exit();
-
     }
 }
