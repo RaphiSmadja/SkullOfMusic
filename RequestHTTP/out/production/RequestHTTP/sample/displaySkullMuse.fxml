@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.DisplaySkullMuse">
+   <children>
+      <MenuBar prefHeight="29.0" prefWidth="1024.0">
+        <menus>
+          <Menu mnemonicParsing="false" onAction="#pressMenuProfile" text="Profile">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#pressMenuEditProfile" text="Edit my profile" />
+                  <MenuItem mnemonicParsing="false" onAction="#pressMenuDisconnect" text="Disconnect" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" onAction="#pressMenuDisplaySkull" text="Music">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#pressMenuDirectory" text="My directory" />
+                  <MenuItem mnemonicParsing="false" onAction="#pressMenuUpload" text="Upload music" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Label layoutX="14.0" layoutY="80.0" text="Our hits of the week">
+         <font>
+            <Font name="Loma Bold" size="16.0" />
+         </font>
+      </Label>
+       <GridPane fx:id="grid_hits_week" layoutX="14.0" layoutY="130.0">
+           <columnConstraints>
+               <ColumnConstraints minWidth="10.0" prefWidth="100.0"/>
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+           </columnConstraints>
+           <rowConstraints>
+               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+           </rowConstraints>
+           <children>
+               <Label text="Play" />
+               <Label text="Song" GridPane.columnIndex="1" />
+               <Label text="Artist" GridPane.columnIndex="2" />
+               <Label text="Heart stroke" GridPane.columnIndex="3" />
+               <Label text="Like" GridPane.columnIndex="4" />
+               <Label text="Unlike" GridPane.columnIndex="5" />
+               <Label text="Signalize" GridPane.columnIndex="6" />
+           </children>
+       </GridPane>
+   </children>
+</AnchorPane>
