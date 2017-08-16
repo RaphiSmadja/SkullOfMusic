@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.UploadMusic">
+    <children>
+        <MenuBar prefHeight="29.0" prefWidth="1024.0">
+            <menus>
+                <Menu mnemonicParsing="false" onAction="#pressMenuProfile" text="Profile">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#pressMenuEditProfile" text="Edit my profile" />
+                        <MenuItem mnemonicParsing="false" onAction="#pressMenuDisconnect" text="Disconnect" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" onAction="#pressMenuDisplaySkull" text="Music">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#pressMenuDisplaySkull" text="Home" />
+                        <MenuItem mnemonicParsing="false" onAction="#pressMenuDirectory" text="My directory" />
+                        <MenuItem mnemonicParsing="false" onAction="#pressMenuUpload" text="Upload music" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <Label layoutX="14.0" layoutY="80.0" text="Upload a music">
+            <font>
+                <Font name="Loma Bold" size="16.0" />
+            </font>
+        </Label>
+      <GridPane layoutX="14.0" layoutY="136.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Title" />
+            <TextField fx:id="field_title" GridPane.columnIndex="1" />
+            <Label text="Artist" GridPane.rowIndex="1" />
+            <TextField fx:id="field_artist" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label GridPane.rowIndex="2" />
+            <ComboBox fx:id="comboBox_gender" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Electronic" />
+                        <String fx:value="Rock" />
+                        <String fx:value="R&amp;B" />
+                        <String fx:value="Classical" />
+                        <String fx:value="Hip Hop" />
+                        <String fx:value="Reggae" />
+                        <String fx:value="Jazz" />
+                        <String fx:value="Metal" />
+                    </FXCollections>
+                </items>
+                <value>
+                    <String fx:value="Hip Hop" />
+                </value>
+            </ComboBox>
+             <Label text="File only .mp3" GridPane.rowIndex="3" />
+            <Button fx:id="button_chooseFile" mnemonicParsing="false" onAction="#pressChooseMuse" text="Choose" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="label_file" text="" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="Gender" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" text="Validate" onAction="#pressValidate" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         </children>
+      </GridPane>
+    </children>
+</AnchorPane>

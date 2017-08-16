@@ -5,7 +5,7 @@ const express = require("express");
 const router = express.Router();
 const models = require("../models");
 const User = models.User;
-const bcrypt = require("bcrypt");
+//const bcrypt = require("bcrypt");
 const validator = require("validator");
 const Music = models.Music;
 
@@ -21,7 +21,18 @@ router.post("/login", function(req, res, next) {
 		}
 	}).then(user => {
 		if (user){
-			bcrypt.compare(passwordSend, user.hashedPassword, function(err, lol) {
+			if(passwordSend == user.hashedPassword){
+				sess = req.session;
+				sess.userId = user.id;
+                sess.firstName = user.firstName;
+         		sess.lastName = user.lastName;
+				sess.emailAddress = user.emailAddress;
+				sess.isAdmin = user.isAdmin;
+				res.json({Session: sess, User: user, msg: 'you are connected'});
+			} else {
+				res.json({msg: 'wrong login infos'});
+			}
+			/*bcrypt.compare(passwordSend, user.hashedPassword, function(err, lol) {
 				if(lol == true){
 					sess = req.session;
 					sess.userId = user.id;
@@ -32,7 +43,7 @@ router.post("/login", function(req, res, next) {
 					res.json({Session: sess, User: user, msg: 'you are connected'});
 			    	} else
 					res.json({msg: 'wrong login infos'});
-			});
+			});*/
 		} else
 			res.json({msg: 'wrong login infos'});
 	}).catch(err => { res.json({msg: 'nok', err: err}); });
@@ -94,7 +105,7 @@ router.post("/registration", function(req, res){
 								emailAddress: mail1,
 								firstName: firstname1,
 								lastName: lastname1,
-								hashedPassword: bcrypt.hashSync(password1, 5),
+								hashedPassword: /*bcrypt.hashSync(*/password1/*, 5)*/,
 								picture: "",
 								pseudo: pseudo1,
 								isAdmin: 0
@@ -218,6 +229,7 @@ router.get("/display_music", function(req, res) {
 	if(!sess.emailAddress){
 		res.json({ msg: 'you are not connected so you can\'t display'});
 	} else {
+		console.log(new Date((new Date() - 168 * 60 * 60 * 1000)));
 		Music.findAll({
 			"where": {
 				      createdAt: {
@@ -226,7 +238,7 @@ router.get("/display_music", function(req, res) {
 				  }
 		}).then(musictype => {
 			if (musictype){
-				console.log("we find")
+				console.log("we find " + musictype);
 				res.send({msg: musictype});
 			}
 			else {

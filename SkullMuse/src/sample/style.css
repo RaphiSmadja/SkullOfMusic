@@ -1,0 +1,31 @@
+AnchorPane{
+    -fx-background-image: url("../ressources/img/background.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+}
+#logo_cerberus{
+    -fx-alignment:center;
+
+}
+.label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+.button {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border:none;
+    -fx-background-color: linear-gradient(#00BFFF, #4169E1);
+    -fx-alignment: center;
+    -fx-background-radius: 15px;
+    -fx-font-size: 20px;
+    -fx-width: 100px;
+}
+.button:hover {
+    -fx-text-fill: black;
+}
+.slider .thumb{
+ -fx-padding: 10px;
+ -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}

@@ -31,11 +31,6 @@ module.exports = function(sequelize, DataTypes) {
 		// désactive la modification des noms de tableaux; Par défaut, la mise à jour automatiquement
 		// transforme tous les noms de modèles passés (premier paramètre de définition) en pluriel.
 		// si vous ne voulez pas cela, définissez le suivant
-	}, {
-		classMethods: {
-			associate: function(models) {
-			}
-		}
 	});
 	return Music;
 };

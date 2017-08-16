@@ -40,7 +40,7 @@ public class DisplaySkullMuse {
     }
 
     public void pressMenuEditProfile(ActionEvent actionEvent) throws IOException {
-        URL url2 = new URL("http://localhost:3000/music/display_music");
+        URL url2 = new URL("http://localhost:3000/users/display_music");
         HttpUrlConnection HttpMuse = new HttpUrlConnection(url2);
         String test = HttpMuse.sendAndReadHTTPGet();
         System.out.println(test);

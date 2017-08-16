@@ -7,7 +7,7 @@ const models = require("../models");
 const User = models.User;
 const bcrypt = require("bcrypt");
 const validator = require("validator");
-const randomPassword = "asasas"
+const Music = models.Music;
 
 let sess;
 
@@ -25,8 +25,6 @@ router.post("/login", function(req, res, next) {
 				if(lol == true){
 					sess = req.session;
 					sess.userId = user.id;
-                    sess.firstName = user.firstName;
-           			sess.lastName = user.lastName;
 					sess.emailAddress = user.emailAddress;
 					sess.isAdmin = user.isAdmin;
 					res.json({Session: sess, User: user, msg: 'you are connected'});
@@ -34,15 +32,16 @@ router.post("/login", function(req, res, next) {
 					res.json({msg: 'wrong login infos'});
 			});
 		} else
-			res.json({msg: 'you are not connected'});
+			res.json({msg: 'wrong login infos'});
 	}).catch(err => { res.json({msg: 'nok', err: err}); });
 });
 
-router.get("/logout", function(req, res, next) {
+router.get("/logout", function(req, res) {
 	res.type("json");
-	sess = req.session;
+	console.log(sess.emailAddress);
 	if(!sess.emailAddress){
 		res.json({ msg: 'you are not connected so you can\'t you connected '});
+		console.log("you're not connected");
 	} else {
 		console.log(sess.emailAddress);
 		req.session.destroy(err => {
@@ -53,79 +52,78 @@ router.get("/logout", function(req, res, next) {
         	});
 	}
 });
-
-router.post("/registration", (req, res, next) => {
-	console.log("registration");
-	res.type("json");
-	if (!validator.isEmail(req.body.emailAddress1)) {
+;
+router.post("/registration", function(req, res){
+	let mail1 = req.body.emailAddress1;
+	let firstname1 = req.body.firstName1;
+	let lastname1 = req.body.lastName1;
+	let password1 = req.body.password1;
+	let password2 = req.body.password2;
+	let pseudo1 = req.body.pseudo1;
+	console.log(mail1+"  "+firstname1+"  "+lastname1+"  "+password1+"  "+password2+"  "+pseudo1+"  ");
+	if (!validator.isEmail(mail1)) {
 		res.json({
 			message: "It's not a mail address"
 		});
-	}
-
-	if (req.body.emailAddress1 !== req.body.emailAddress2) {
-		res.json({
-			message: "Email addresses are not the same"
-		});
-	}
-
-	if (req.body.password1.length < 8) {
-		res.json({
-			message: "Password must contains at least 8 characters"
-		});
-	}
-
-	if (req.body.password1 !== req.body.password2) {
-		res.json({
-			message: "Passwords are not the same"
-		});
-	}
-
-	User.find({
-		"where": {
-			"emailAddress": req.body.emailAddress1
-		}
-	}).then(user => {
-		if (user) {
+	} else if(firstname1.length<3 || lastname1.length <3) {
 			res.json({
-				message: "Email address is already used"
-			});
-		} else {
-			User.create({
-				pseudo: "",
-				emailAddress: req.body.emailAddress1,
-				lastName: "",
-				firstName: "",
-				hashedPassword: bcrypt.hashSync(req.body.password1, 5),
-				picture: "",
-				isAdmin: 0
-			}).then(user => {
-				if (user) {
+				message: "firstname or lastname is too small minimum 4"
+			});	
+		} else if(password1.length<5 || password2.length <5) {
+				res.json({
+					message: "The password size must be greater than 5"
+				});	
+			} else if(password1 != password2) {
 					res.json({
-						message: "Success"
-					});
-				} else {
-					res.json({
-						message: "Fail"
+						message: "The password aren't same"
+					});	
+				} else{
+					User.find({
+						"where": {
+							"emailAddress": req.body.emailAddress1
+						}
+					}).then(user => {
+						if (user) {
+							res.json({
+								message: "Email address is already used"
+							});
+						} else {
+							User.create({
+								emailAddress: mail1,
+								firstName: firstname1,
+								lastName: lastname1,
+								hashedPassword: bcrypt.hashSync(password1, 5),
+								picture: "",
+								pseudo: pseudo1,
+								isAdmin: 0
+							}).then(user => {
+								if (user) {
+									res.json({
+										message: "Success"
+									});
+								} else {
+									res.json({
+										message: "Fail"
+									});
+								}
+							}).catch(err => {
+								res.json({
+									err: err
+								});
+							});
+						}
+					}).catch(err => {
+						res.json({
+							msg: 'Unable to search user',
+							err: err
+						});
 					});
 				}
-			}).catch(err => {
-				res.json({
-					err: err
-				});
-			});
-		}
-	}).catch(err => {
-		res.json({
-			msg: 'Unable to search user',
-			err: err
-		});
-	});
+		
 });
 
 router.post("/editPassword", (req, res, next) => {
 	res.type("json");
-
 	if (!sess) {
 		res.json({
 			message: "You are not connected"
@@ -209,4 +207,34 @@ router.post("/edit", (req, res, next) => {
 	});
 });
 
+router.get("/display_music", function(req, res) {
+	res.type("json");
+
+	console.log(sess.emailAddress);
+	console.log(" ___ " + sess.emailAddress);
+	console.log(sess.userId);
+	console.log(sess.lastName);
+	
+	if(!sess.emailAddress){
+		res.json({ msg: 'you are not connected so you can\'t display'});
+	} else {
+		Music.findAll({
+			"where": {
+				      createdAt: {
+				          $gt: new Date((new Date() - 168 * 60 * 60 * 1000))
+				        }
+				  }
+
+		}).then(musictype => {
+			if (musictype){
+				console.log("we find")
+				res.send({msg: musictype});
+			}
+			else {
+				console.log("we don't find")
+				res.send({msg: 'We don\'t find !'});
+			}
+		}).catch(err => { throw err; });
+	}
+})
 module.exports = router;
