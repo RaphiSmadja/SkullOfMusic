@@ -24,6 +24,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static sample.Connection.connection;
+
 public class UploadMusic {
     @FXML
     private Label label_file;
@@ -37,6 +39,9 @@ public class UploadMusic {
     private Button button_chooseFile;
     File selectedFile = null;
 
+    public UploadMusic(){
+
+    }
     public void pressMenuProfile(ActionEvent actionEvent) {
     }
 
@@ -45,15 +50,15 @@ public class UploadMusic {
 
     public void pressMenuDisconnect(ActionEvent actionEvent) throws IOException {
         URL url = new URL("http://localhost:3000/users/logout");
-        HttpUrlConnection HttpMuse = new HttpUrlConnection(url);
-        String test = HttpMuse.sendAndReadHTTPGet();
+        connection.setUrl(url);
+        String test = connection.sendAndReadHTTPGet();
         System.out.println(test);
         Main.root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         Main.root.getStylesheets().add(Controller.class.getResource("style.css").toExternalForm());
         Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
-    public void pressMenuDisplaySkull(ActionEvent actionEvent) throws IOException {
+    public void pressMenuDisplaySkull(ActionEvent actionEvent) throws IOException, JSONException {
         Main.root = FXMLLoader.load(getClass().getResource("displaySkullMuse.fxml"));
         Main.root.getStylesheets().add(Controller.class.getResource("style.css").toExternalForm());
         Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
@@ -92,8 +97,9 @@ public class UploadMusic {
 
 
         String params = new String(json.toString());
-        HttpUrlConnection upload = new HttpUrlConnection(url,params);
-        upload.sendAndReadHTTPPostForm(field_title.getText(),field_artist.getText(),comboBox_gender.getValue().toString(),selectedFile.getAbsoluteFile());
+        connection.setUrl(url);
+        connection.setParams(params);
+        connection.sendAndReadHTTPPostForm(field_title.getText(),field_artist.getText(),comboBox_gender.getValue().toString(),selectedFile.getAbsoluteFile());
 
         /*HttpUrlConnection registration = new HttpUrlConnection(url,params);
         String responseHTTP = registration.sendAndReadHTTPPostForm(field_title.getText(),field_artist.getText(),comboBox_gender.getValue().toString(),selectedFile,attachmentFileName ,CurrentLine);

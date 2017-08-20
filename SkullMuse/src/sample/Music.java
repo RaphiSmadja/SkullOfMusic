@@ -39,8 +39,7 @@ public class Music {
 
         System.out.println("***********" + this.getClass().getResource("").toString());
         try {
-            getMp().stop();
-            getMp().play();
+            this.mp.play();
         } catch (Exception e){
             e.printStackTrace();
             System.out.println("bueg");
@@ -50,10 +49,17 @@ public class Music {
 
     protected void stop_music() {
         try {
-            getMp().stop();
+            this.mp.stop();
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
+    protected void pause_music() {
+        try {
+            this.mp.pause();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

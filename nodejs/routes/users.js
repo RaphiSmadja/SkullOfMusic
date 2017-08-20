@@ -1,13 +1,14 @@
 "use strict";
 
-const session = require("express-session");
 const express = require("express");
+const cookieParser = require('cookie-parser');
 const router = express.Router();
 const models = require("../models");
+const request = require("request");
+const Music = models.Music;
 const User = models.User;
 const bcrypt = require("bcrypt");
 const validator = require("validator");
-const Music = models.Music;
 
 let sess;
 
@@ -23,7 +24,8 @@ router.post("/login", function(req, res, next) {
 		if (user){
 			bcrypt.compare(passwordSend, user.hashedPassword, function(err, lol) {
 				if(lol == true){
-					sess = req.session;
+					sess = req.cookies;
+					console.log(req.cookies);
 					sess.userId = user.id;
 					sess.emailAddress = user.emailAddress;
 					sess.isAdmin = user.isAdmin;
@@ -37,19 +39,25 @@ router.post("/login", function(req, res, next) {
 });
 
 router.get("/logout", function(req, res) {
-	res.type("json");
-	console.log(sess.emailAddress);
+	 res.type("json");
+	 console.log("dedef");
+	 console.log("___ " +req.cookies);
+	 sess = req.cookies;
+	 console.log(sess.emailAddress);
+	console.log(" ___ " + sess.emailAddress);
+	console.log(sess.userId);
+	console.log(sess.lastName);
 	if(!sess.emailAddress){
 		res.json({ msg: 'you are not connected so you can\'t you connected '});
 		console.log("you're not connected");
 	} else {
 		console.log(sess.emailAddress);
-		req.session.destroy(err => {
-            		if(err)
-                	res.json({ msg: 'Error while trying to disconnect !', err: err });
-            		else
-                	res.json({ msg: 'You are disconnected !', });
-        	});
+		res.clearCookie(sess.emailAddress);
+		res.clearCookie(sess.userId);
+		console.log("kokok");
+	 console.log("___ " +sess.emailAddress);
+	 console.log("___ " +sess.userId);
+		res.send({msg: 'you are disconnected'});
 	}
 });
 ;
@@ -207,34 +215,4 @@ router.post("/edit", (req, res, next) => {
 	});
 });
 
-router.get("/display_music", function(req, res) {
-	res.type("json");
-
-	console.log(sess.emailAddress);
-	console.log(" ___ " + sess.emailAddress);
-	console.log(sess.userId);
-	console.log(sess.lastName);
-	
-	if(!sess.emailAddress){
-		res.json({ msg: 'you are not connected so you can\'t display'});
-	} else {
-		Music.findAll({
-			"where": {
-				      createdAt: {
-				          $gt: new Date((new Date() - 168 * 60 * 60 * 1000))
-				        }
-				  }
-
-		}).then(musictype => {
-			if (musictype){
-				console.log("we find")
-				res.send({msg: musictype});
-			}
-			else {
-				console.log("we don't find")
-				res.send({msg: 'We don\'t find !'});
-			}
-		}).catch(err => { throw err; });
-	}
-})
 module.exports = router;

@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 const net = require('net');
 const http = require('http');
 
-const express_session = require('express-session');
+// const express_session = require('express-session');
 const index = require('./routes/index');
 const users = require("./routes/users");
 const music = require("./routes/music");
@@ -21,11 +21,7 @@ models.sequelize.sync();
 let port_app = '3000';
 var app = express();
 
-app.use(express_session({
-    secret: 'AsdSDFgGlDSfAOsfgrgZaFznSndjgdC',
-    resave: true,
-    saveUninitialized: true
-}));
+app.use(cookieParser());
 
 
 // view engine setup

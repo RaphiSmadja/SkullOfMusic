@@ -1,7 +1,7 @@
 "use strict";
 
 const express = require("express");
-let session = require('express-session');
+const cookieParser = require('cookie-parser');
 const router = express.Router();
 const models = require("../models");
 const request = require("request");
@@ -46,6 +46,8 @@ var upload = multer({
 router.post('/api/musics',upload, function (req, res) {
 	res.type('json');
 	console.log("ee");
+	console.log(req.cookies);
+	console.log(req.cookie);
 	console.log("title " +req.body.title1);
 	console.log("artist " +req.body.artist1);
 	console.log("gender " +req.body.gender1);
@@ -54,8 +56,9 @@ router.post('/api/musics',upload, function (req, res) {
 	console.log("ooeoeoeassssssssssssssssssss " +req.file.path);	
 	req.file.path = "file:/home/raphael/Bureau/Rattrapage2/nodejs/ressources/musics/songs/"+req.file.filename;
     console.log("deededeeedeefefeffegeege");
-    sess = req.session;
+    sess = req.cookies;
     var userid = sess.userId;
+    console.log("çççççççççççççççççççççççççççç " + userid);
     let music_title = req.body.title1;
     console.log(music_title);
     let music_artist = req.body.artist1;
@@ -63,51 +66,55 @@ router.post('/api/musics',upload, function (req, res) {
     let music_gender = req.body.gender1;
     console.log("ldle");
     console.log("deefefef");
-	Music.find({
-		"where": {
-    	$or: [
-    	    {
-    	      title: {
-    	      	$eq : music_title
-    	      }
-    	    },
-    	    {
-    	      pathMusic: {
-    	      	$eq : music_pathMusic
-    	      }
-    	    }
-    	  ]
-    	}
-	}).then(tre => {
-		if (tre) {
-			res.json({
-				message: "music is already used"
-			});
-		} else {
-			console.log("ldlqqqqqqqqe");
-			Music.create({
-				ownerIdMusic: userid,
-                title: music_title,
-                artist: music_artist,
-                pathMusic: music_pathMusic,
-                gender: music_gender
-			}).then(user => {
-				if (user) {
-					res.json({
-						message: "Success"
-					});
-				} else {
-					res.json({
-						message: "Fail"
-					});
-				}
-			}).catch(err => {
+    if(!sess.emailAddress){
+		res.json({ msg: 'you are not connected so you can\'t display'});
+	} else {
+		Music.find({
+			"where": {
+	    	$or: [
+	    	    {
+	    	      title: {
+	    	      	$eq : music_title
+	    	      }
+	    	    },
+	    	    {
+	    	      pathMusic: {
+	    	      	$eq : music_pathMusic
+	    	      }
+	    	    }
+	    	  ]
+	    	}
+		}).then(tre => {
+			if (tre) {
 				res.json({
-					err: err
+					message: "music is already used"
 				});
-			});
-		}
-	});
+			} else {
+				console.log("ldlqqqqqqqqe");
+				Music.create({
+					ownerIdMusic: userid,
+	                title: music_title,
+	                artist: music_artist,
+	                pathMusic: music_pathMusic,
+	                gender: music_gender
+				}).then(user => {
+					if (user) {
+						res.json({
+							message: "Success"
+						});
+					} else {
+						res.json({
+							message: "Fail"
+						});
+					}
+				}).catch(err => {
+					res.json({
+						err: err
+					});
+				});
+			}
+		});
+	}
 });
 
 
@@ -164,7 +171,12 @@ router.post("/search_by_gender_news", function(req, res, next) {
 //Display All News Music
 router.get("/display_music", function(req, res) {
 	res.type("json");
-	sess = req.session;
+	sess = req.cookies;
+	console.log(sess.emailAddress);
+	console.log(" ___ " + sess.emailAddress);
+	console.log(sess.userId);
+	console.log(sess.lastName);
+	
 	if(!sess.emailAddress){
 		res.json({ msg: 'you are not connected so you can\'t display'});
 	} else {
@@ -174,6 +186,7 @@ router.get("/display_music", function(req, res) {
 				          $gt: new Date((new Date() - 168 * 60 * 60 * 1000))
 				        }
 				  }
+
 		}).then(musictype => {
 			if (musictype){
 				console.log("we find")

@@ -17,9 +17,9 @@ import java.util.Map;
 public class HttpUrlConnection {
     URL url = new URL("http://localhost:3000/users/registration");
     String params;
-    String cookie="userId=13, emailAddress=raphi@gmail.yes, isAdmin:0";
+    String cookie="cookie";
 
-    /** CREATION POST REQUEST **/
+    /** CREATION REQUEST **/
     public HttpUrlConnection(URL url, String params) throws IOException, JSONException {
         this.url = url;
         this.params = params;
@@ -35,14 +35,14 @@ public class HttpUrlConnection {
         con.setRequestMethod("POST");
         //ajout du header POSTMan
         con.setRequestProperty("Content-Type", "application/json");
-        /*con.setRequestProperty("Cookie",cookie);
-        con.setUseCaches(true);*/
-
+        if (cookie != "cookie") {
+            con.setRequestProperty("Cookie", cookie);
+            con.setUseCaches(true);
+            con.connect();
+        }
         //ajout de parametre definir a true ONLY POST
         con.setDoInput(true);
         con.setDoOutput(true);
-
-        con.connect();
 
         OutputStream os = con.getOutputStream();
         //ecriture des parametres
@@ -81,7 +81,16 @@ public class HttpUrlConnection {
         String CRLF = "\r\n"; // Line separator required by multipart/form-data.
 
         URLConnection connection = getUrl().openConnection();
+        System.out.println("___ " + getCookie());
+        System.out.println("___ " + this.cookie);
         connection.setDoOutput(true);
+        System.out.println("@@@@@ " + getCookie());
+        System.out.println("@@@@@ " + this.cookie);
+        if (this.cookie != "cookie") {
+            System.out.println("dedefefeg");
+            connection.setRequestProperty("Cookie", cookie);
+            connection.setUseCaches(true);
+        }
         connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
         try (
                 OutputStream output = connection.getOutputStream();
@@ -142,10 +151,11 @@ public class HttpUrlConnection {
         con.setDoOutput(false);
         //ajout du header POSTMan
         con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Cookie",cookie);
-        System.out.println(con.getRequestProperty("Cookie"));
-        con.setUseCaches(true);
-        con.connect();
+        if (cookie != "cookie") {
+            con.setRequestProperty("Cookie", cookie);
+            con.setUseCaches(true);
+            con.connect();
+        }
 
         //lecture de la reponse
         int responseCode = con.getResponseCode();
@@ -176,5 +186,21 @@ public class HttpUrlConnection {
 
     public void setUrl(URL url) {
         this.url = url;
+    }
+
+    public String getCookie() {
+        return cookie;
+    }
+
+    public void setCookie(String cookie) {
+        this.cookie = cookie;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
+    }
+
+    public String getParams() {
+        return params;
     }
 }
