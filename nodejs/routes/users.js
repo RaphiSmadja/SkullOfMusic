@@ -43,7 +43,6 @@ router.get("/logout", function(req, res) {
 	 console.log("dedef");
 	 console.log("___ " +req.cookies);
 	 sess = req.cookies;
-	 console.log(sess.emailAddress);
 	console.log(" ___ " + sess.emailAddress);
 	console.log(sess.userId);
 	console.log(sess.lastName);
