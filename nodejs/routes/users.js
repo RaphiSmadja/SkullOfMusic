@@ -29,13 +29,13 @@ router.post("/login", function(req, res, next) {
 					sess.userId = user.id;
 					sess.emailAddress = user.emailAddress;
 					sess.isAdmin = user.isAdmin;
-					res.json({Session: sess, User: user, msg: 'you are connected'});
+					res.send({Session: sess, User: user, msg: 'you are connected'});
 			    	} else
-					res.json({msg: 'wrong login infos'});
+					res.send({msg: 'wrong login infos'});
 			});
 		} else
-			res.json({msg: 'wrong login infos'});
-	}).catch(err => { res.json({msg: 'nok', err: err}); });
+			res.send({msg: 'wrong login infos'});
+	}).catch(err => { res.send({msg: 'nok', err: err}); });
 });
 
 router.get("/logout", function(req, res) {
@@ -47,7 +47,7 @@ router.get("/logout", function(req, res) {
 	console.log(sess.userId);
 	console.log(sess.lastName);
 	if(!sess.emailAddress){
-		res.json({ msg: 'you are not connected so you can\'t you connected '});
+		res.send({ msg: 'you are not connected'});
 		console.log("you're not connected");
 	} else {
 		console.log(sess.emailAddress);
@@ -61,6 +61,7 @@ router.get("/logout", function(req, res) {
 });
 ;
 router.post("/registration", function(req, res){
+	res.type("json");
 	let mail1 = req.body.emailAddress1;
 	let firstname1 = req.body.firstName1;
 	let lastname1 = req.body.lastName1;
@@ -69,62 +70,45 @@ router.post("/registration", function(req, res){
 	let pseudo1 = req.body.pseudo1;
 	console.log(mail1+"  "+firstname1+"  "+lastname1+"  "+password1+"  "+password2+"  "+pseudo1+"  ");
 	if (!validator.isEmail(mail1)) {
-		res.json({
-			message: "It's not a mail address"
-		});
+		res.send({msg: "It's not a mail address"});
 	} else if(firstname1.length<3 || lastname1.length <3) {
-			res.json({
-				message: "firstname or lastname is too small minimum 4"
-			});	
-		} else if(password1.length<5 || password2.length <5) {
-				res.json({
-					message: "The password size must be greater than 5"
-				});	
-			} else if(password1 != password2) {
-					res.json({
-						message: "The password aren't same"
-					});	
-				} else{
-					User.find({
-						"where": {
-							"emailAddress": req.body.emailAddress1
-						}
-					}).then(user => {
-						if (user) {
-							res.json({
-								message: "Email address is already used"
-							});
-						} else {
-							User.create({
-								emailAddress: mail1,
-								firstName: firstname1,
-								lastName: lastname1,
-								hashedPassword: bcrypt.hashSync(password1, 5),
-								pseudo: pseudo1,
-								isAdmin: 0
-							}).then(user => {
-								if (user) {
-									res.json({
-										message: "Success"
-									});
-								} else {
-									res.json({
-										message: "Fail"
-									});
-								}
-							}).catch(err => {
-								res.json({
-									err: err
-								});
-							});
-						}
-					}).catch(err => {
-						res.json({
-							msg: 'Unable to search user',
-							err: err
-						});
-					});
-				}
+			res.send({msg: "firstname or lastname is too small minimum 4"});	
+	} else if(password1.length<5 || password2.length <5) {
+			res.send({msg: "The password size must be greater than 5"});	
+	} else if(password1 != password2) {
+			res.send({msg: "The password aren't same"});	
+	} else {
+		User.find({
+			"where": {
+				"emailAddress": req.body.emailAddress1
+			}
+		}).then(user => {
+			if (user) {
+				res.send({
+					msg: "Email address is already used"
+				});
+			} else {
+				User.create({
+					emailAddress: mail1,
+					firstName: firstname1,
+					lastName: lastname1,
+					hashedPassword: bcrypt.hashSync(password1, 5),
+					pseudo: pseudo1,
+					isAdmin: 0
+				}).then(user => {
+					if (user) {
+						res.send({msg: "Success"});
+					} else {
+						res.send({msg: "Fail"});
+					}
+				}).catch(err => {
+					res.send({err: err});
+				});
+			}
+		}).catch(err => {
+			res.send({msg: 'Unable to search user',err: err});
+		});
+	}
 		
 });
 
@@ -147,8 +131,8 @@ router.get("/checkIdentity", function(req, res) {
 				})
 			}
 		}).catch(err =>{
-			res.json({
-				message: 'Unable to check user',
+			res.send({
+				msg: 'Unable to check user',
 				err: err
 			});
 		});
@@ -169,16 +153,13 @@ router.post("/editProfil", function(req, res){
 			}
 		}).then(user => {
 			if(user) {
-						console.log("p)pfefe");
 				if (!bcrypt.compareSync(oldPassword, user.hashedPassword)) {
 					res.send({msg: "Old Password is not correct"});
 				} else {
 						console.log("dplzlpzefe");
 					if (newPassword.length < 5 || newPassword == "") {
-						console.log("pb");
 						res.send({msg: "New Password 5 char minimum"});
 					} else {
-						console.log("defefe");
 						user.updateAttributes({
 							pseudo: req.body.pseudo1,
 							emailAddress: req.body.email1,

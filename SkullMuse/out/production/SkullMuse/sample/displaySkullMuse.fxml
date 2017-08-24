@@ -23,7 +23,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#pressMenuDisconnect" style="-fx-background-color: #8A0829;" text="Disconnect" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" onAction="#pressMenuDisconnect" text="Music">
+                <Menu mnemonicParsing="false" text="Music">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#pressMenuDisplaySkull" style="-fx-background-color: #8A0829;" text="Home" />
                         <MenuItem mnemonicParsing="false" onAction="#pressMenuDirectory" style="-fx-background-color: #8A0829;" text="My directory" />

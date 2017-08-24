@@ -63,7 +63,7 @@
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Electronic" />
                         <String fx:value="Rock" />
-                        <String fx:value="R&amp;B" />
+                        <String fx:value="Rnb" />
                         <String fx:value="Classical" />
                         <String fx:value="Hip Hop" />
                         <String fx:value="Reggae" />

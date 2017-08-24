@@ -45,29 +45,21 @@ var upload = multer({
 
 router.post('/api/musics',upload, function (req, res) {
 	res.type('json');
-	console.log("ee");
 	console.log(req.cookies);
-	console.log(req.cookie);
 	console.log("title " +req.body.title1);
 	console.log("artist " +req.body.artist1);
 	console.log("gender " +req.body.gender1);
-	console.log("ooeoeoe " +req.file.path);
-	console.log("ooeoeoeassssssssssssssssssss " +req.file.size);
-	console.log("ooeoeoeassssssssssssssssssss " +req.file.path);	
+	console.log("file path " +req.file.path);
+	console.log("file size " +req.file.size);
 	req.file.path = "file:///C:/Users/raphi//Desktop/Rattrapage/nodejs/ressources/musics/songs/"+req.file.filename;
-    console.log("deededeeedeefefeffegeege");
     sess = req.cookies;
     var userid = sess.userId;
-    console.log("çççççççççççççççççççççççççççç " + userid);
     let music_title = req.body.title1;
-    console.log(music_title);
     let music_artist = req.body.artist1;
     let music_pathMusic = req.file.path;
     let music_gender = req.body.gender1;
-    console.log("ldle");
-    console.log("deefefef");
     if(!sess.emailAddress){
-		res.json({ msg: 'you are not connected so you can\'t display'});
+		res.send({ msg: 'you are not connected'});
 	} else {
 		Music.find({
 			"where": {
@@ -86,11 +78,8 @@ router.post('/api/musics',upload, function (req, res) {
 	    	}
 		}).then(tre => {
 			if (tre) {
-				res.json({
-					message: "music is already used"
-				});
+				res.send({msg: "music is already used"});
 			} else {
-				console.log("ldlqqqqqqqqe");
 				Music.create({
 					ownerIdMusic: userid,
 	                title: music_title,
@@ -99,18 +88,12 @@ router.post('/api/musics',upload, function (req, res) {
 	                gender: music_gender
 				}).then(user => {
 					if (user) {
-						res.json({
-							message: "Success"
-						});
+						res.json({msg: "Success"});
 					} else {
-						res.json({
-							message: "Fail"
-						});
+						res.json({msg: "Fail"});
 					}
 				}).catch(err => {
-					res.json({
-						err: err
-					});
+					res.json({err: err});
 				});
 			}
 		});
@@ -122,7 +105,7 @@ router.post("/search_by_gender", function(req, res, next) {
 	res.type("json");
 	sess = req.session;
 	if(!sess.emailAddress){
-		res.json({ msg: 'you are not connected so you can\'t search'});
+		res.send({ msg: 'you are not connected so you can\'t search'});
 	} else {
 		Music.findAll({
 			"where": {
@@ -144,13 +127,13 @@ router.post("/search_by_gender", function(req, res, next) {
 //musique par genre de moins d'une semaine
 router.post("/search_by_gender_news", function(req, res, next) {
 	res.type("json");
-	sess = req.session;
+	sess = req.cookies;
 	if(!sess.emailAddress){
-		res.json({ msg: 'you are not connected so you can\'t search'});
+		res.send({ msg: 'you are not connected'});
 	} else {
 		Music.findAll({
 			"where": {
-				      gender: req.body.gender,
+				      gender: req.body.gender1,
 				      createdAt: {
 				          $gt: new Date((new Date() - 168 * 60 * 60 * 1000))
 				        }
@@ -178,7 +161,7 @@ router.get("/display_music", function(req, res) {
 	console.log(sess.lastName);
 	
 	if(!sess.emailAddress){
-		res.json({ msg: 'you are not connected so you can\'t display'});
+		res.send({ msg: 'you are not connected so you can\'t display'});
 	} else {
 		Music.findAll({
 			"where": {

@@ -1,6 +1,5 @@
 package sample;
 
-import Request.HttpUrlConnection;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -31,7 +30,7 @@ public class DisplaySkullMuse {
     private MenuBar menubar;
     @FXML
     private Menu testos;
-
+    public static String gender_send;
     public DisplaySkullMuse() throws IOException, JSONException {
         System.out.println("odeoke");
         System.out.println(userIsAdmin);
@@ -152,7 +151,7 @@ public class DisplaySkullMuse {
             grid_hits_week.add(new Label(jsObj.getJSONArray("msg").getJSONObject(i).get("ownerIdMusic").toString()),j,k);
             j++;
             Button buttonsignalize = new Button();
-            buttonsignalize.setGraphic(new ImageView(img[4]));
+            buttonsignalize.setGraphic(new ImageView(img[6]));
             grid_hits_week.add(buttonsignalize,j,k);
             j=0;
             k++;
@@ -172,6 +171,7 @@ public class DisplaySkullMuse {
     }
 
     public void pressMenuDisplaySkull(ActionEvent actionEvent) throws JSONException, IOException {
+        initialize();
     }
 
     public void pressMenuDisconnect(ActionEvent actionEvent) throws IOException {
@@ -199,35 +199,46 @@ public class DisplaySkullMuse {
         return img;
     }
 
-    public void choose_gender_classical(MouseEvent mouseEvent) {
-        System.out.println("classical");
+    public void choose_gender_classical(MouseEvent mouseEvent) throws IOException, JSONException {
+        gender_send = "Classical";
+        genderSend(gender_send);
     }
-    public void choose_gender_electro(MouseEvent mouseEvent) {
-        System.out.println("electro");
-    }
+    public void choose_gender_electro(MouseEvent mouseEvent) throws IOException, JSONException {
+        gender_send = "Electronic";
+        genderSend(gender_send);
 
-    public void choose_gender_jazz(MouseEvent mouseEvent) {
-        System.out.println("jazz");
     }
-
-    public void choose_gender_metal(MouseEvent mouseEvent) {
-        System.out.println("metal");
+    public void choose_gender_jazz(MouseEvent mouseEvent) throws IOException, JSONException {
+        gender_send = "Jazz";
+        genderSend(gender_send);
     }
-
-    public void choose_gender_rnb(MouseEvent mouseEvent) {
-        System.out.println("rnb");
+    public void choose_gender_metal(MouseEvent mouseEvent) throws IOException, JSONException {
+        gender_send = "Metal";
+        genderSend(gender_send);
     }
-
-    public void choose_gender_reggae(MouseEvent mouseEvent) {
-        System.out.println("reggae");
+    public void choose_gender_rnb(MouseEvent mouseEvent) throws IOException, JSONException {
+        gender_send = "Rnb";
+        genderSend(gender_send);
     }
-
-    public void choose_gender_rock(MouseEvent mouseEvent) {
+    public void choose_gender_reggae(MouseEvent mouseEvent) throws IOException, JSONException {
+        gender_send = "Reggae";
+        genderSend(gender_send);
     }
-
-    public void choose_gender_latino(MouseEvent mouseEvent) {
+    public void choose_gender_rock(MouseEvent mouseEvent) throws IOException, JSONException {
+        gender_send = "Rock";
+        genderSend(gender_send);
     }
-
-    public void choose_gender_hiphop(MouseEvent mouseEvent) {
+    public void choose_gender_latino(MouseEvent mouseEvent) throws IOException, JSONException {
+        gender_send = "Latino";
+        genderSend(gender_send);
+    }
+    public void choose_gender_hiphop(MouseEvent mouseEvent) throws IOException, JSONException {
+        gender_send = "Hip Hop";
+        genderSend(gender_send);
+    }
+    public void genderSend(String genre) throws IOException, JSONException {
+        Main.root = FXMLLoader.load(getClass().getResource("displayGender.fxml"));
+        Main.root.getStylesheets().add(DisplayGender.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 }
