@@ -10,9 +10,10 @@ const Music = models.Music;
 let sess;
 
 router.post("/like_music", function(req, res, next) {
+	console.log("dedefef");
 	res.type("json");
-	sess = req.session;
-	console.log(sess.id);
+    sess = req.cookies;
+    var userid = sess.userId;
 	if(!sess.emailAddress){
 		res.json({ msg: 'you are not connected so you can\'t like music'});
 	} else {
@@ -25,7 +26,7 @@ router.post("/like_music", function(req, res, next) {
 				likeUnlike.find({
 				"where": {
 						musicId: req.body.idMusic,
-						likerUnlikerId: sess.userId
+						likerUnlikerId: userid
 					}
 				}).then(lUl => {
 				if (lUl){

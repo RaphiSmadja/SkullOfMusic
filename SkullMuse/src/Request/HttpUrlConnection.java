@@ -38,6 +38,8 @@ public class HttpUrlConnection {
         if (cookie != "cookie") {
             con.setRequestProperty("Cookie", cookie);
             con.setUseCaches(true);
+        }
+        if (getUrl().equals("http://localhost:3000/users/login")){
             con.connect();
         }
         //ajout de parametre definir a true ONLY POST
@@ -154,7 +156,10 @@ public class HttpUrlConnection {
         if (cookie != "cookie") {
             con.setRequestProperty("Cookie", cookie);
             con.setUseCaches(true);
-            con.connect();
+        }
+
+        if (getUrl().equals("http://localhost:3000/users/logout")){
+            con.disconnect();
         }
 
         //lecture de la reponse

@@ -54,7 +54,7 @@ router.post('/api/musics',upload, function (req, res) {
 	console.log("ooeoeoe " +req.file.path);
 	console.log("ooeoeoeassssssssssssssssssss " +req.file.size);
 	console.log("ooeoeoeassssssssssssssssssss " +req.file.path);	
-	req.file.path = "file:/home/raphael/Bureau/Rattrapage2/nodejs/ressources/musics/songs/"+req.file.filename;
+	req.file.path = "file:///C:/Users/raphi//Desktop/Rattrapage/nodejs/ressources/musics/songs/"+req.file.filename;
     console.log("deededeeedeefefeffegeege");
     sess = req.cookies;
     var userid = sess.userId;

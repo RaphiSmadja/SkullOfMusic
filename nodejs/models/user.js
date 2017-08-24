@@ -22,9 +22,6 @@ module.exports = function(sequelize, DataTypes) {
 		hashedPassword: {
 			type: DataTypes.STRING
 		},
-		picture: {
-			type: DataTypes.STRING
-		},
 		isAdmin: {
 			type: DataTypes.BIGINT
 		}

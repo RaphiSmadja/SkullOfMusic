@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -54,11 +55,7 @@ public class DisplaySkullMuse {
         String result = connection.sendAndReadHTTPGet();
         System.out.println(result);
         JSONObject jsObj = new JSONObject(result);
-        Image imgplay = new Image(getClass().getResourceAsStream("../ressources/img/play_button.png"));
-        Image imgpause = new Image(getClass().getResourceAsStream("../ressources/img/pause_button.png"));
-        Image imgheartEmpty = new Image(getClass().getResourceAsStream("../ressources/img/heart_empty.png"));
-        Image like_empty = new Image(getClass().getResourceAsStream("../ressources/img/like_empty.png"));
-        Image signalize_empty = new Image(getClass().getResourceAsStream("../ressources/img/stop_empty.png"));
+        Image[] img = searchRessources();
         Media media = null;
         MediaPlayer mp = null;
         final int[] length = new int[1];
@@ -70,7 +67,7 @@ public class DisplaySkullMuse {
         for (int i = 0; i < jsObj.getJSONArray("msg").length(); i++) {
             //System.out.println(jsObj.getJSONArray("msg").getJSONObject(i).get("pathMusic"));
             Button buttonplay = new Button();
-            buttonplay.setGraphic(new ImageView(imgplay));
+            buttonplay.setGraphic(new ImageView(img[0]));
             final int indexClik = i;
             buttonplay.setOnAction(new EventHandler<ActionEvent>()
             {
@@ -79,10 +76,9 @@ public class DisplaySkullMuse {
                 public void handle(ActionEvent event) {
                     try {
                         if (playing == false){
-                            String pathMuse = hashMap.get(indexClik);;
-                            Media media = new Media(pathMuse);
+                            Media media = new Media(hashMap.get(indexClik).toString());
                             MediaPlayer mp = new MediaPlayer(media);
-                            buttonplay.setGraphic(new ImageView(imgpause));
+                            buttonplay.setGraphic(new ImageView(img[1]));
                             if(muse.getMp() != mp) {
                                 muse.stop_music();
                                 muse.setMp(mp);
@@ -93,7 +89,7 @@ public class DisplaySkullMuse {
                             }
                             playing = true;
                         } else{
-                            buttonplay.setGraphic(new ImageView(imgplay));
+                            buttonplay.setGraphic(new ImageView(img[0]));
                             if(muse.getMp() == mp) {
                                 System.out.println("pause");
                                 muse.pause_music();
@@ -115,39 +111,48 @@ public class DisplaySkullMuse {
             grid_hits_week.add(new Label(jsObj.getJSONArray("msg").getJSONObject(i).get("gender").toString()),j,k);
             j++;
             Button buttonheart = new Button();
-            buttonheart.setGraphic(new ImageView(imgheartEmpty));
-            buttonheart.setOnAction(new EventHandler<ActionEvent>() {
+            buttonheart.setGraphic(new ImageView(img[2]));
+            grid_hits_week.add(buttonheart,j,k);
+            j++;
+            Button buttonlike = new Button();
+            buttonlike.setGraphic(new ImageView(img[4]));
+            buttonlike.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     URL url = null;
                     try {
-                        url = new URL("http://localhost:3000/users/logout");
+                        url = new URL("http://localhost:3000/likeUnlike/like_music");
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
-                    HttpUrlConnection HttpMuse = null;
+                    JSONObject json = new JSONObject();
                     try {
-                        HttpMuse = new HttpUrlConnection(url);
-                    } catch (IOException e) {
+                        json.put("idMusic",jsObj.getJSONArray("msg").getJSONObject(indexClik).get("idMusic").toString());
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    connection.setUrl(url);
+                    String params = new String(json.toString());
+                    connection.setParams(params);
+
                     try {
-                        String test = HttpMuse.sendAndReadHTTPGet();
+                        String responseHTTP = connection.sendAndReadHTTPPost();
+                        System.out.println(responseHTTP);
+                        JSONObject res = new JSONObject(responseHTTP);
+                        buttonlike.setGraphic(new ImageView(img[5]));
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             });
-            grid_hits_week.add(buttonheart,j,k);
-            j++;
-            Button buttonlike = new Button();
-            buttonlike.setGraphic(new ImageView(like_empty));
             grid_hits_week.add(buttonlike,j,k);
             j++;
             grid_hits_week.add(new Label(jsObj.getJSONArray("msg").getJSONObject(i).get("ownerIdMusic").toString()),j,k);
             j++;
             Button buttonsignalize = new Button();
-            buttonsignalize.setGraphic(new ImageView(signalize_empty));
+            buttonsignalize.setGraphic(new ImageView(img[4]));
             grid_hits_week.add(buttonsignalize,j,k);
             j=0;
             k++;
@@ -180,10 +185,49 @@ public class DisplaySkullMuse {
     }
 
     public void pressMenuEditProfile(ActionEvent actionEvent) throws IOException, JSONException {
-
+        Main.root = FXMLLoader.load(getClass().getResource("editProfil.fxml"));
+        Main.root.getStylesheets().add(Controller.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
-    public void searchRessources(){
+    public Image[] searchRessources(){
+        Image[] img = new Image[8];
+        String pathImg[] = {"play_button.png","pause_button.png","heart_empty.png","heart_full.png","like_empty.png","like_full.png","stop_empty.png","stop_full.png"};
+        for (int i=0; i<8; i++){
+            img[i]= new Image(getClass().getResourceAsStream("../ressources/img/"+pathImg[i]));
+        }
+        return img;
+    }
 
+    public void choose_gender_classical(MouseEvent mouseEvent) {
+        System.out.println("classical");
+    }
+    public void choose_gender_electro(MouseEvent mouseEvent) {
+        System.out.println("electro");
+    }
+
+    public void choose_gender_jazz(MouseEvent mouseEvent) {
+        System.out.println("jazz");
+    }
+
+    public void choose_gender_metal(MouseEvent mouseEvent) {
+        System.out.println("metal");
+    }
+
+    public void choose_gender_rnb(MouseEvent mouseEvent) {
+        System.out.println("rnb");
+    }
+
+    public void choose_gender_reggae(MouseEvent mouseEvent) {
+        System.out.println("reggae");
+    }
+
+    public void choose_gender_rock(MouseEvent mouseEvent) {
+    }
+
+    public void choose_gender_latino(MouseEvent mouseEvent) {
+    }
+
+    public void choose_gender_hiphop(MouseEvent mouseEvent) {
     }
 }

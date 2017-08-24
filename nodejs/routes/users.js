@@ -100,7 +100,6 @@ router.post("/registration", function(req, res){
 								firstName: firstname1,
 								lastName: lastname1,
 								hashedPassword: bcrypt.hashSync(password1, 5),
-								picture: "",
 								pseudo: pseudo1,
 								isAdmin: 0
 							}).then(user => {
@@ -129,89 +128,74 @@ router.post("/registration", function(req, res){
 		
 });
 
-router.post("/editPassword", (req, res, next) => {
+router.get("/checkIdentity", function(req, res) {
 	res.type("json");
-	if (!sess) {
-		res.json({
-			message: "You are not connected"
-		});
-	}
-
-	if (req.body.newpassword1 !== req.body.newpassword2) {
-		res.json({
-			message: "Passwords are not equals"
-		});
-	}
-
-	User.find({
-		where: {
-			emailAddress : req.body.emailAddress
-		}
-	}).then(user => {
-		if (user) {
-			if (!bcrypt.compareSync(req.body.actual, user.hashedPassword)) {
-				res.json({
-					message: "Password is not correct"
-				});
+	sess = req.cookies;
+	if(!sess.emailAddress){
+		res.send({ msg: 'you are not connected'});
+	} else {
+		User.find({
+			"where" : {
+				id:sess.userId
 			}
-
-			user.updateAttributes({
-				hashedPassword: bcrypt.hashSync(req.body.password1)
-			});
-
+		}).then(checkUse => {
+			if(checkUse) {
+				res.send({msg: checkUse});
+			} else {
+				res.send({
+					msg: "We don't find this user"
+				})
+			}
+		}).catch(err =>{
 			res.json({
-				message: "Success"
+				message: 'Unable to check user',
+				err: err
 			});
-		} else {
-			res.json({
-				message: "Email address doesn't exists",
-			});
-		}
-	}).catch (err => {
-		res.json({
-			err: err
 		});
-	});
+	}
 });
 
-router.post("/edit", (req, res, next) => {
+router.post("/editProfil", function(req, res){
 	res.type("json");
-
-	if (!sess) {
-		res.json({
-			message: "You are not connected"
+	sess = req.cookies;
+	let oldPassword = req.body.oldPassword;
+	let newPassword = req.body.newPassword;
+	if (!sess.emailAddress) {
+		res.send({ msg: "You are not connected" });
+	} else {
+		User.findOne({
+			"where": {
+				"emailAddress": req.body.email1
+			}
+		}).then(user => {
+			if(user) {
+						console.log("p)pfefe");
+				if (!bcrypt.compareSync(oldPassword, user.hashedPassword)) {
+					res.send({msg: "Old Password is not correct"});
+				} else {
+						console.log("dplzlpzefe");
+					if (newPassword.length < 5 || newPassword == "") {
+						console.log("pb");
+						res.send({msg: "New Password 5 char minimum"});
+					} else {
+						console.log("defefe");
+						user.updateAttributes({
+							pseudo: req.body.pseudo1,
+							emailAddress: req.body.email1,
+							lastName: req.body.lastName1,
+							firstName: req.body.firstName1,
+							hashedPassword: bcrypt.hashSync(newPassword, 5),
+						});
+						res.send({msg: "User has been modified"});
+					}
+				}
+			}
+		}).catch(err =>{
+			res.send({
+				msg: 'Unable to update information user',err: err
+			});
 		});
 	}
-
-	User.findOne({
-		"where": {
-			"emailAddress": req.body.existingEmailAddress
-		}
-	}).then(user => {
-		if (user) {
-			user.updateAttributes({
-				handle: req.body.handle,
-				emailAddress: req.body.emailAddress,
-				lastName: req.body.lastName,
-				firstName: req.body.firstName,
-				phoneNumber: req.body.phoneNumber,
-				newsletter: req.body.newsletter,
-				picture: req.body.picture
-			});
-			res.json({
-				message: "User has been modified"
-			});
-		} else {
-			res.json({
-				message: "User doesn't exists"
-			});
-		}
-	}).catch(err => {
-		res.json({
-			message: 'Unable to edit user',
-			err: err
-		});
-	});
 });
 
 module.exports = router;
