@@ -1,10 +1,11 @@
 package sample;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import static sample.Connection.connection;
+import static sample.Connection.pseudoCo;
+import static sample.Connection.userIsAdmin;
 
 /**
  * Created by raphi on 22/08/2017.
@@ -33,7 +36,11 @@ public class EditProfil {
     private PasswordField field_Newpassword;
     @FXML
     private Label info_edition;
+    @FXML
+    private Menu profil_dynamo;
     public void initialize() throws IOException, JSONException {
+        profil_dynamo.setText(pseudoCo);
+        addMenuItemAdmin();
         URL url = new URL("http://localhost:3000/users/checkIdentity");
         connection.setUrl(url);
         String result = connection.sendAndReadHTTPGet();
@@ -45,19 +52,35 @@ public class EditProfil {
         field_lastname.setText(jsObj.getJSONObject("msg").get("lastName").toString());
         field_firstname.setText(jsObj.getJSONObject("msg").get("firstName").toString());
     }
-    public void pressMenuEditProfile(ActionEvent actionEvent) {
+    public void pressMenuEditProfile(ActionEvent actionEvent) throws IOException {
+        Main.root = FXMLLoader.load(getClass().getResource("editProfil.fxml"));
+        Main.root.getStylesheets().add(Controller.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
-    public void pressMenuDisconnect(ActionEvent actionEvent) {
+    public void pressMenuDisconnect(ActionEvent actionEvent) throws IOException {
+        URL url3 = new URL("http://localhost:3000/users/logout");
+        connection.setUrl(url3);
+        String result = connection.sendAndReadHTTPGet();
+        System.out.println(result);
+        Main.root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Main.root.getStylesheets().add(Controller.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
-    public void pressMenuDisplaySkull(ActionEvent actionEvent) {
+    public void pressMenuDisplaySkull(ActionEvent actionEvent) throws IOException {
+        Main.root = FXMLLoader.load(getClass().getResource("displaySkullMuse.fxml"));
+        Main.root.getStylesheets().add(Connection.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
     public void pressMenuDirectory(ActionEvent actionEvent) {
     }
 
-    public void pressMenuUpload(ActionEvent actionEvent) {
+    public void pressMenuUpload(ActionEvent actionEvent) throws IOException {
+        Main.root = FXMLLoader.load(getClass().getResource("uploadMusic.fxml"));
+        Main.root.getStylesheets().add(UploadMusic.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
     public void editionConfirmation(ActionEvent actionEvent) throws IOException, JSONException {
@@ -83,6 +106,26 @@ public class EditProfil {
         } else {
             info_edition.setText(resp);
             info_edition.setTextFill(Color.web("#00cc00"));
+        }
+    }
+    private void addMenuItemAdmin() {
+        if (userIsAdmin.equals("1")){
+            System.out.println("admin");
+            System.out.println(profil_dynamo.getItems());
+            MenuItem adminPanel = new MenuItem("Administrator");
+            adminPanel.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    try{
+                        Main.root = FXMLLoader.load(getClass().getResource("administrator.fxml"));
+                        Main.root.getStylesheets().add(Administrator.class.getResource("style.css").toExternalForm());
+                        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            profil_dynamo.getItems().add(2,adminPanel);
         }
     }
 

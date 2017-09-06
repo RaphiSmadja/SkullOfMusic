@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Administrator">
+    <children>
+    <MenuBar fx:id="menubar" prefHeight="30.0" prefWidth="1024.0">
+        <menus>
+            <Menu fx:id="profil_dynamo" mnemonicParsing="false" text="Profile">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#pressMenuEditProfile" text="Edit my profile" />
+                    <MenuItem mnemonicParsing="false" onAction="#pressMenuDisconnect" text="Disconnect" />
+                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Music">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#pressMenuDisplaySkull" text="Home" />
+                    <MenuItem mnemonicParsing="false" onAction="#pressMenuDirectory" text="My directory" />
+                    <MenuItem mnemonicParsing="false" onAction="#pressMenuUpload" text="Upload music" />
+                </items>
+            </Menu>
+        </menus>
+    </MenuBar>
+        <ScrollPane hbarPolicy="NEVER" layoutY="30" prefHeight="768.0" prefWidth="1024.0" vbarPolicy="ALWAYS">
+            <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1000.0" prefWidth="1024.0">
+                    <children>
+                        <Label layoutX="14.0" layoutY="50.0" text="Our users">
+                            <font>
+                                <Font name="Loma Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <ScrollPane fx:id="display_users" layoutX="12.0" layoutY="90.0" prefHeight="200.0" prefWidth="985.0" vbarPolicy="NEVER">
+                            <content>
+                                <GridPane fx:id="grid_users" gridLinesVisible="true">
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="75.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="180.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="180.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="125.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="102.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Label text="Id" GridPane.halignment="CENTER" />
+                                        <Label text="Pseudo" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                        <Label text="Email" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                        <Label text="Lastname" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
+                                        <Label text="Firstname" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
+                                        <Label text="Date creation" GridPane.columnIndex="5" GridPane.halignment="CENTER" />
+                                        <Label text="Admin" GridPane.columnIndex="6" GridPane.halignment="CENTER" />
+                                        <Label text="Banish" GridPane.columnIndex="7" GridPane.halignment="CENTER" />
+                                    </children>
+                                </GridPane>
+                            </content>
+                        </ScrollPane>
+                        <Label layoutX="14.0" layoutY="350.0" text="Musics Signalized">
+                            <font>
+                                <Font name="Loma Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <ScrollPane fx:id="display_musics_signalized" layoutX="12.0" layoutY="400.0" prefHeight="200.0" prefWidth="985.0" vbarPolicy="NEVER">
+                            <content>
+                                <GridPane fx:id="grid_signalize" gridLinesVisible="true">
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="180.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="80.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="180.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="80.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="125.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="170.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="65.0" />
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="65.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Label text="FlagmanId" GridPane.halignment="CENTER" />
+                                        <Label text="Pseudo Flagman" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                        <Label text="MusicId" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                        <Label text="Title" GridPane.columnIndex="3" GridPane.halignment="CENTER" />
+                                        <Label text="OwnerId" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
+                                        <Label text="Pseudo" GridPane.columnIndex="5" GridPane.halignment="CENTER" />
+                                        <Label text="Email" GridPane.columnIndex="6" GridPane.halignment="CENTER" />
+                                        <Label text="Play" GridPane.columnIndex="7" GridPane.halignment="CENTER" />
+                                        <Label text="Delete" GridPane.columnIndex="8" GridPane.halignment="CENTER" />
+                                    </children>
+                                </GridPane>
+                            </content>
+                        </ScrollPane>
+                  <Label fx:id="error_musics_signalized" layoutX="202.0" layoutY="352.0" prefHeight="21.0" prefWidth="312.0" />
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

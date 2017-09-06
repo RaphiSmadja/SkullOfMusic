@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     public static Parent root;
     public static Stage primaryStage;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         this.primaryStage = primaryStage;
@@ -22,8 +23,5 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+    public static void main(String[] args) {launch(args);}
 }

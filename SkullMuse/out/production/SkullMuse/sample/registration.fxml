@@ -10,10 +10,10 @@
    <children>
       <Button fx:id="btnValidate" layoutX="50.0" layoutY="658.0" mnemonicParsing="false" onAction="#pressButtonValidate" text="Validate" />
       <Button fx:id="btnBack" layoutX="924.0" layoutY="658.0" mnemonicParsing="false" onAction="#pressButtonBack" text="Back" />
-      <Label text="Name" />
-      <TextField fx:id="fieldsName" layoutX="200.0" layoutY="6.0" />
-      <Label layoutY="56.0" text="Surname" />
-      <TextField fx:id="fieldsSurname" layoutX="200.0" layoutY="56.0" />
+      <Label text="Firstname" />
+      <TextField fx:id="fieldsFirstName" layoutX="200.0" layoutY="6.0" />
+      <Label layoutY="56.0" text="Lastname" />
+      <TextField fx:id="fieldsLastname" layoutX="200.0" layoutY="56.0" />
       <Label layoutY="106.0" text="Email" />
       <TextField fx:id="fieldsEmail" layoutX="200.0" layoutY="106.0" />
       <Label layoutX="-1.0" layoutY="206.0" text="Password" />

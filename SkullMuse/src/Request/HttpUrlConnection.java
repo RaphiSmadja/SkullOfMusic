@@ -45,32 +45,35 @@ public class HttpUrlConnection {
         //ajout de parametre definir a true ONLY POST
         con.setDoInput(true);
         con.setDoOutput(true);
+        try {
+            OutputStream os = con.getOutputStream();
+            //ecriture des parametres
+            os.write(params.getBytes());
+            os.flush();
+            os.close();
+            //lecture de la reponse
+            int responseCode = con.getResponseCode();
+            System.out.println("POST Response Code :: " + responseCode);
+            if (responseCode == HttpURLConnection.HTTP_OK) { //success
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
 
-        OutputStream os = con.getOutputStream();
-        //ecriture des parametres
-        os.write(params.getBytes());
-        os.flush();
-        os.close();
-
-        //lecture de la reponse
-        int responseCode = con.getResponseCode();
-        System.out.println("POST Response Code :: " + responseCode);
-        if (responseCode == HttpURLConnection.HTTP_OK) { //success
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+                // print result
+                System.out.println(response.toString());
+                res = response.toString();
+            } else {
+                System.out.println("POST request not worked");
+                res = "POST request not worked";
             }
-            in.close();
-
-            // print result
-            System.out.println(response.toString());
-            res = response.toString();
-        } else {
-            System.out.println("POST request not worked");
-            res = "POST request not worked";
+        } catch (Exception e){
+            res = "Error Internet !";
         }
+
         return res;
     }
 

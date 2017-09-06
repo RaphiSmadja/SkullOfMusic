@@ -29,37 +29,31 @@ router.post("/login", function(req, res, next) {
 					sess.userId = user.id;
 					sess.emailAddress = user.emailAddress;
 					sess.isAdmin = user.isAdmin;
-					res.send({Session: sess, User: user, msg: 'you are connected'});
-			    	} else
-					res.send({msg: 'wrong login infos'});
+					res.send({Session: sess, User: user, msg: 'You are connected'});
+			    } else
+				res.send({msg: 'Incorrect password'});
 			});
 		} else
-			res.send({msg: 'wrong login infos'});
+			res.send({msg: 'Wrong login infos'});
 	}).catch(err => { res.send({msg: 'nok', err: err}); });
 });
 
 router.get("/logout", function(req, res) {
-	 res.type("json");
-	 console.log("dedef");
-	 console.log("___ " +req.cookies);
-	 sess = req.cookies;
-	console.log(" ___ " + sess.emailAddress);
-	console.log(sess.userId);
-	console.log(sess.lastName);
+	res.type("json");
+	sess = req.cookies;
 	if(!sess.emailAddress){
 		res.send({ msg: 'you are not connected'});
-		console.log("you're not connected");
 	} else {
 		console.log(sess.emailAddress);
 		res.clearCookie(sess.emailAddress);
 		res.clearCookie(sess.userId);
 		console.log("kokok");
-	 console.log("___ " +sess.emailAddress);
-	 console.log("___ " +sess.userId);
+		console.log("___ " +sess.emailAddress);
+		console.log("___ " +sess.userId);
 		res.send({msg: 'you are disconnected'});
 	}
 });
-;
+
 router.post("/registration", function(req, res){
 	res.type("json");
 	let mail1 = req.body.emailAddress1;
@@ -70,9 +64,9 @@ router.post("/registration", function(req, res){
 	let pseudo1 = req.body.pseudo1;
 	console.log(mail1+"  "+firstname1+"  "+lastname1+"  "+password1+"  "+password2+"  "+pseudo1+"  ");
 	if (!validator.isEmail(mail1)) {
-		res.send({msg: "It's not a mail address"});
+		res.send({msg: "Error on email address"});
 	} else if(firstname1.length<3 || lastname1.length <3) {
-			res.send({msg: "firstname or lastname is too small minimum 4"});	
+			res.send({msg: "Firstname or Lastname is too small (minimum 4)"});	
 	} else if(password1.length<5 || password2.length <5) {
 			res.send({msg: "The password size must be greater than 5"});	
 	} else if(password1 != password2) {
@@ -116,7 +110,7 @@ router.get("/checkIdentity", function(req, res) {
 	res.type("json");
 	sess = req.cookies;
 	if(!sess.emailAddress){
-		res.send({ msg: 'you are not connected'});
+		res.send({ msg: 'You are not connected'});
 	} else {
 		User.find({
 			"where" : {
@@ -171,6 +165,154 @@ router.post("/editProfil", function(req, res){
 					}
 				}
 			}
+		}).catch(err =>{
+			res.send({
+				msg: 'Unable to update information user',err: err
+			});
+		});
+	}
+});
+
+router.get("/admin/displayAllUsers", function(req, res) {
+	res.type("json");
+	sess = req.cookies;
+	if(sess.isAdmin != 1){
+		res.send({ msg: 'You are not admin'});
+	} else {
+		User.findAll({
+			attributes: ['id', 'pseudo', 'emailAddress', 'firstName' ,'lastName', 'isAdmin', 'createdAt', 'deletedAt']
+		}).then(displayUser => {
+			if(displayUser) {
+				res.send({msg: displayUser});
+			} else {
+				res.send({
+					msg: "We don't find all users"
+				})
+			}
+		}).catch(err =>{
+			res.send({
+				msg: 'Unable to display list of users',
+				err: err
+			});
+		});
+	}
+});
+
+router.post("/admin/addUserAdmin", function(req, res) {
+	res.type("json");
+	sess = req.cookies;
+	if (sess.isAdmin != 1) {
+		res.send({ msg: "You are not admin" });
+	} else {
+		User.findOne({
+			"where": {
+				"emailAddress": req.body.email1
+			}
+		}).then(user => {
+			if(user) {
+					user.updateAttributes({
+						isAdmin: 1
+					});
+					res.send({msg: "User is Admin"});
+				}
+		}).catch(err =>{
+			res.send({
+				msg: 'Unable to update information user',err: err
+			});
+		});
+	}
+});
+
+router.post("/admin/demotionAdmin", function(req, res) {
+	res.type("json");
+	sess = req.cookies;
+	if (sess.isAdmin != 1) {
+		res.send({ msg: "You are not admin" });
+	} else {
+		User.findOne({
+			"where": {
+				"emailAddress": req.body.email1
+			}
+		}).then(user => {
+			if(user) {
+					user.updateAttributes({
+						isAdmin: 0
+					});
+					res.send({msg: "User is now not Admin"});
+				}
+		}).catch(err =>{
+			res.send({
+				msg: 'Unable to update information user',err: err
+			});
+		});
+	}
+});
+
+router.post("/admin/banishUser", function(req, res) {
+	res.type("json");
+	sess = req.cookies;
+	if (sess.isAdmin != 1) {
+		res.send({ msg: "You are not admin" });
+	} else {
+		User.destroy({
+			"where": {
+				"emailAddress": req.body.email1
+			}
+		}).then(user => {
+			if(user) {	
+				res.send({msg: "User is deleted"});
+			} else {
+				res.send({msg: "erreur"});
+			}
+		}).catch(err =>{
+			res.send({
+				msg: 'Unable to delete user',err: err
+			});
+		});
+	}
+});
+
+router.post("/admin/deleteMusic", function(req, res) {
+	res.type("json");
+	sess = req.cookies;
+	if (sess.isAdmin != 1) {
+		res.send({ msg: "You are not admin" });
+	} else {
+		Music.destroy({
+			"where": {
+				"idMusic": req.body.idMuse
+			}
+		}).then(musicDelete => {
+			if(musicDelete) {	
+				res.send({msg: "Music is deleted"});
+			} else {
+				res.send({msg: "erreur"});
+			}
+		}).catch(err =>{
+			res.send({
+				msg: 'Unable to delete user',err: err
+			});
+		});
+	}
+});
+
+router.post("/admin/restUser", function(req, res) {
+	res.type("json");
+	sess = req.cookies;
+	if (sess.isAdmin != 1) {
+		res.send({ msg: "You are not admin" });
+	} else {
+		User.findOne({
+			"where": {
+				"emailAddress": req.body.email1
+			}
+		}).then(user => {
+			if(user) {
+					user.updateAttributes({
+						deletedAt: "NULL"
+					});
+					res.send({msg: "User is now not Admin"});
+				}
 		}).catch(err =>{
 			res.send({
 				msg: 'Unable to update information user',err: err

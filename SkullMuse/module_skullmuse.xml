@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_skullmuse" default="compile.module.skullmuse">
+  <dirname property="module.skullmuse.basedir" file="${ant.file.module_skullmuse}"/>
+  
+  <property name="module.jdk.home.skullmuse" value="${jdk.home.1.8}"/>
+  <property name="module.jdk.bin.skullmuse" value="${jdk.bin.1.8}"/>
+  <property name="module.jdk.classpath.skullmuse" value="jdk.classpath.1.8"/>
+  
+  <property name="compiler.args.skullmuse" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="skullmuse.output.dir" value="${module.skullmuse.basedir}/out/production/SkullMuse"/>
+  <property name="skullmuse.testoutput.dir" value="${module.skullmuse.basedir}/out/test/SkullMuse"/>
+  
+  <path id="skullmuse.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="skullmuse.module.production.classpath">
+    <path refid="${module.jdk.classpath.skullmuse}"/>
+  </path>
+  
+  <path id="skullmuse.runtime.production.module.classpath">
+    <pathelement location="${skullmuse.output.dir}"/>
+  </path>
+  
+  <path id="skullmuse.module.classpath">
+    <path refid="${module.jdk.classpath.skullmuse}"/>
+    <pathelement location="${skullmuse.output.dir}"/>
+  </path>
+  
+  <path id="skullmuse.runtime.module.classpath">
+    <pathelement location="${skullmuse.testoutput.dir}"/>
+    <pathelement location="${skullmuse.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.skullmuse">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.skullmuse">
+    <patternset refid="excluded.from.module.skullmuse"/>
+  </patternset>
+  
+  
+  <target name="compile.module.skullmuse" depends="compile.module.skullmuse.production,compile.module.skullmuse.tests" description="Compile module SkullMuse"/>
+  
+  <target name="compile.module.skullmuse.production" depends="register.custom.compilers" description="Compile module SkullMuse; production classes"/>
+  
+  <target name="compile.module.skullmuse.tests" depends="register.custom.compilers,compile.module.skullmuse.production" description="compile module SkullMuse; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.skullmuse" description="cleanup module">
+    <delete dir="${skullmuse.output.dir}"/>
+    <delete dir="${skullmuse.testoutput.dir}"/>
+  </target>
+</project>

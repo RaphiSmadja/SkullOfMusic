@@ -19,46 +19,37 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Stack;
 
-import static sample.Connection.connection;
-import static sample.Connection.userIsAdmin;
+import static sample.Connection.*;
 
 public class DisplaySkullMuse {
     @FXML
     private GridPane grid_hits_week;
     @FXML
-    private MenuBar menubar;
-    @FXML
-    private Menu testos;
+    private Menu profil_dynamo;
+
+    Stack<Integer> stack = new Stack();
+    HashMap <Integer, Button> hashMap1 = new HashMap<>();
+    int lastIndexStack= -1;
+    int firstIndexStack = -2;
+    public boolean isPlaying = false;
     public static String gender_send;
     public DisplaySkullMuse() throws IOException, JSONException {
-        System.out.println("odeoke");
         System.out.println(userIsAdmin);
-        if (userIsAdmin.equals("1")){
-            System.out.println("admin");
-            /*MenuItem menuAdmin = new MenuItem("Admin");
-            testos.getItems().set(1,menuAdmin);
-            testos.show();*/
-            /*MenuItem newMenuItem = new MenuItem("Admin");
-            Menu menutest = new Menu("Admin");
-            testos.getItems().add(newMenuItem);
-            testos.show();*/
-        }
     }
 
     public void initialize() throws JSONException, IOException {
         int j=0;
         int k=1;
+        profil_dynamo.setText(pseudoCo);
+        addMenuItemAdmin();
         URL url2 = new URL("http://localhost:3000/music/display_music");
         connection.setUrl(url2);
         String result = connection.sendAndReadHTTPGet();
         System.out.println(result);
         JSONObject jsObj = new JSONObject(result);
         Image[] img = searchRessources();
-        Media media = null;
-        MediaPlayer mp = null;
-        final int[] length = new int[1];
-        Music muse = new Music(media,mp);
         HashMap <Integer, String> hashMap = new HashMap<>();
         for (int i = 0; i < jsObj.getJSONArray("msg").length(); i++){
             hashMap.put(i,jsObj.getJSONArray("msg").getJSONObject(i).get("pathMusic").toString());
@@ -68,33 +59,48 @@ public class DisplaySkullMuse {
             Button buttonplay = new Button();
             buttonplay.setGraphic(new ImageView(img[0]));
             final int indexClik = i;
+            hashMap1.put(indexClik,buttonplay);
             buttonplay.setOnAction(new EventHandler<ActionEvent>()
             {
-                public boolean playing = false;
                 @Override
                 public void handle(ActionEvent event) {
                     try {
-                        if (playing == false){
-                            Media media = new Media(hashMap.get(indexClik).toString());
-                            MediaPlayer mp = new MediaPlayer(media);
-                            buttonplay.setGraphic(new ImageView(img[1]));
-                            if(muse.getMp() != mp) {
+                        Media media = new Media(hashMap.get(indexClik).toString());
+                        MediaPlayer mp = new MediaPlayer(media);
+                        System.out.println("index click " +indexClik);
+                        stack.push(indexClik);
+                        if (stack.size() == 2) {
+                            lastIndexStack = stack.peek();
+                            stack.pop();
+                            firstIndexStack = stack.peek();
+                            if (lastIndexStack == firstIndexStack) {
+                                buttonplay.setGraphic((new ImageView(img[0])));
                                 muse.stop_music();
-                                muse.setMp(mp);
-                                muse.play_music();
+                                stack.pop();
                             } else {
-                                mp.seek(mp.getCurrentTime());
-                                mp.play();
+                                if (lastIndexStack == firstIndexStack) {
+                                    Button btn3 = hashMap1.get(firstIndexStack);
+                                    btn3.setGraphic(new ImageView(img[0]));
+                                    muse.stop_music();
+                                    stack.pop();
+                                } else {
+                                    Button btn1 = hashMap1.get(lastIndexStack);
+                                    Button btn2 = hashMap1.get(firstIndexStack);
+                                    btn1.setGraphic(new ImageView(img[1]));
+                                    btn2.setGraphic(new ImageView(img[0]));
+                                    muse.stop_music();
+                                    muse.setMp(mp);
+                                    muse.play_music();
+                                }
                             }
-                            playing = true;
-                        } else{
-                            buttonplay.setGraphic(new ImageView(img[0]));
-                            if(muse.getMp() == mp) {
-                                System.out.println("pause");
-                                muse.pause_music();
-                            }
-                            muse.stop_music();
-                            playing = false;
+                            stack.pop();
+                            stack.push(lastIndexStack);
+                            firstIndexStack = lastIndexStack;
+                        } else {
+                            buttonplay.setGraphic((new ImageView(img[1])));
+                            muse.setMp(mp);
+                            muse.play_music();
+                            isPlaying = true;
                         }
                     } catch (Exception e) {
                         System.out.println(e.getMessage());
@@ -137,11 +143,8 @@ public class DisplaySkullMuse {
                     try {
                         String responseHTTP = connection.sendAndReadHTTPPost();
                         System.out.println(responseHTTP);
-                        JSONObject res = new JSONObject(responseHTTP);
                         buttonlike.setGraphic(new ImageView(img[5]));
                     } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
@@ -152,13 +155,53 @@ public class DisplaySkullMuse {
             j++;
             Button buttonsignalize = new Button();
             buttonsignalize.setGraphic(new ImageView(img[6]));
+            buttonsignalize.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    try {
+                        URL urlSignalize = new URL("http://localhost:3000/signalize/signalize_music");
+                        JSONObject json = new JSONObject();
+                        json.put("idMusic",jsObj.getJSONArray("msg").getJSONObject(indexClik).get("idMusic").toString());
+                        connection.setUrl(urlSignalize);
+                        String params = new String(json.toString());
+                        connection.setParams(params);
+                        String responseHTTP = connection.sendAndReadHTTPPost();
+                        System.out.println(responseHTTP);
+                        buttonsignalize.setGraphic(new ImageView(img[7]));
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             grid_hits_week.add(buttonsignalize,j,k);
             j=0;
             k++;
         }
     }
 
-    public void pressMenuProfile(ActionEvent actionEvent) {
+    private void addMenuItemAdmin() {
+        if (userIsAdmin.equals("1")){
+            System.out.println("admin");
+            System.out.println(profil_dynamo.getItems());
+            MenuItem adminPanel = new MenuItem("Administrator");
+            adminPanel.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    try{
+                        Main.root = FXMLLoader.load(getClass().getResource("administrator.fxml"));
+                        Main.root.getStylesheets().add(Administrator.class.getResource("style.css").toExternalForm());
+                        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            profil_dynamo.getItems().add(2,adminPanel);
+        }
     }
 
     public void pressMenuUpload(ActionEvent actionEvent) throws IOException {

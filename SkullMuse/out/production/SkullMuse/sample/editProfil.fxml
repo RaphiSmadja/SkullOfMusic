@@ -16,7 +16,7 @@
     <children>
         <MenuBar fx:id="menubar" prefHeight="30.0" prefWidth="1024.0" style="-fx-background-color: #8A0829;">
             <menus>
-                <Menu fx:id="testos" mnemonicParsing="false" style="-fx-background-color: #8A0829;" text="Profile">
+                <Menu fx:id="profil_dynamo" mnemonicParsing="false" style="-fx-background-color: #8A0829;" text="Profile">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#pressMenuEditProfile" style="-fx-background-color: #8A0829;" text="Edit my profile" />
                         <MenuItem mnemonicParsing="false" onAction="#pressMenuDisconnect" style="-fx-background-color: #8A0829;" text="Disconnect" />
@@ -50,7 +50,7 @@
             <Label text="Pseudo" />
              <Label text="Email" GridPane.rowIndex="1" />
              <Label text="Lastname" GridPane.rowIndex="2" />
-             <Label text="Surname" GridPane.rowIndex="3" />
+             <Label text="Firstname" GridPane.rowIndex="3" />
              <Label text="Old Password" GridPane.rowIndex="4" />
              <Label text="New Password" GridPane.rowIndex="5" />
              <TextField fx:id="field_pseudo" GridPane.columnIndex="1" />

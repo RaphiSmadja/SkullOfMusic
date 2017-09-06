@@ -181,5 +181,6 @@ router.get("/display_music", function(req, res) {
 			}
 		}).catch(err => { throw err; });
 	}
-})
+});
+
 module.exports = router;

@@ -1,6 +1,7 @@
 package sample;
 
 import Request.HttpUrlConnection;
+import annotation.AnnoSkullMuse;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -26,7 +28,7 @@ import java.nio.file.Paths;
 
 import static sample.Connection.connection;
 
-public class UploadMusic {
+public class UploadMusic{
     @FXML
     private Label label_file;
     @FXML
@@ -37,15 +39,19 @@ public class UploadMusic {
     private ComboBox comboBox_gender;
     @FXML
     private Button button_chooseFile;
+    @FXML
+    private Label label_error;
+
     File selectedFile = null;
 
     public UploadMusic(){
 
     }
-    public void pressMenuProfile(ActionEvent actionEvent) {
-    }
 
-    public void pressMenuEditProfile(ActionEvent actionEvent) {
+    public void pressMenuEditProfile(ActionEvent actionEvent) throws IOException {
+        Main.root = FXMLLoader.load(getClass().getResource("editProfil.fxml"));
+        Main.root.getStylesheets().add(Controller.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
     public void pressMenuDisconnect(ActionEvent actionEvent) throws IOException {
@@ -67,7 +73,10 @@ public class UploadMusic {
     public void pressMenuDirectory(ActionEvent actionEvent) {
     }
 
-    public void pressMenuUpload(ActionEvent actionEvent) {
+    public void pressMenuUpload(ActionEvent actionEvent) throws IOException {
+        Main.root = FXMLLoader.load(getClass().getResource("uploadMusic.fxml"));
+        Main.root.getStylesheets().add(UploadMusic.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
     public void pressChooseMuse(ActionEvent actionEvent) {
@@ -82,31 +91,24 @@ public class UploadMusic {
         } else {
             label_file.setText("File selection cancelled.");
         }
-
     }
 
     public void pressValidate(ActionEvent actionEvent) throws IOException, JSONException {
         URL url = new URL("http://localhost:3000/music/api/musics");
         JSONObject json = new JSONObject();
-        String attachmentName = null;
-        String attachmentFileName = null;
         json.put("title1",field_title.getText());
         json.put("artist1",field_artist.getText());
         json.put("gender1",comboBox_gender.getValue());
         json.put("fileMusic",selectedFile);
 
-
         String params = new String(json.toString());
-        connection.setUrl(url);
-        connection.setParams(params);
-        connection.sendAndReadHTTPPostForm(field_title.getText(),field_artist.getText(),comboBox_gender.getValue().toString(),selectedFile.getAbsoluteFile());
-
-        /*HttpUrlConnection registration = new HttpUrlConnection(url,params);
-        String responseHTTP = registration.sendAndReadHTTPPostForm(field_title.getText(),field_artist.getText(),comboBox_gender.getValue().toString(),selectedFile,attachmentFileName ,CurrentLine);
-        if(responseHTTP.contains("Success")){
-            System.out.println("connect successfully");
+        if (selectedFile.toString().equals(null)){
+            label_error.setTextFill(Color.web("#ff3300"));
+            label_error.setText("All fields must be completed !");
         } else {
-            System.out.println(responseHTTP);
-        }*/
+            connection.setUrl(url);
+            connection.setParams(params);
+            connection.sendAndReadHTTPPostForm(field_title.getText(), field_artist.getText(), comboBox_gender.getValue().toString(), selectedFile.getAbsoluteFile());
+        }
     }
 }

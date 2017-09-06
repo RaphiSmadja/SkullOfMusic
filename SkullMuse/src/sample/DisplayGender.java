@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -21,6 +23,8 @@ import java.net.URL;
 import java.util.HashMap;
 
 import static sample.Connection.connection;
+import static sample.Connection.pseudoCo;
+import static sample.Connection.userIsAdmin;
 import static sample.DisplaySkullMuse.gender_send;
 
 /**
@@ -28,8 +32,13 @@ import static sample.DisplaySkullMuse.gender_send;
  */
 public class DisplayGender {
     String gender = gender_send;
+    Media media = null;
+    MediaPlayer mp = null;
+    Music muse = new Music(media, mp);
     @FXML
     private GridPane grid_hits_gendek;
+    @FXML
+    private Menu profil_dynamo;
 
     public DisplayGender(){
 
@@ -37,6 +46,8 @@ public class DisplayGender {
     public void initialize() throws JSONException, IOException {
         int j=0;
         int k=1;
+        profil_dynamo.setText(pseudoCo);
+        addMenuItemAdmin();
         URL url = new URL("http://localhost:3000/music/search_by_gender_news");
         connection.setUrl(url);
         JSONObject jsObj = new JSONObject();
@@ -50,10 +61,7 @@ public class DisplayGender {
             System.out.println("There is no music for this gender sorry ! ");
         } else {
             Image[] img = searchRessources();
-            Media media = null;
-            MediaPlayer mp = null;
             final int[] length = new int[1];
-            Music muse = new Music(media, mp);
             HashMap<Integer, String> hashMap = new HashMap<>();
             for (int i = 0; i < jsResp.getJSONArray("msg").length() ; i++) {
                 hashMap.put(i, jsResp.getJSONArray("msg").getJSONObject(i).get("pathMusic").toString());
@@ -65,7 +73,6 @@ public class DisplayGender {
                 final int indexClik = i;
                 buttonplay.setOnAction(new EventHandler<ActionEvent>() {
                     public boolean playing = false;
-
                     @Override
                     public void handle(ActionEvent event) {
                         try {
@@ -161,10 +168,20 @@ public class DisplayGender {
         }
         return img;
     }
-    public void pressMenuEditProfile(ActionEvent actionEvent) {
+    public void pressMenuEditProfile(ActionEvent actionEvent) throws IOException {
+        Main.root = FXMLLoader.load(getClass().getResource("editProfil.fxml"));
+        Main.root.getStylesheets().add(Controller.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
-    public void pressMenuDisconnect(ActionEvent actionEvent) {
+    public void pressMenuDisconnect(ActionEvent actionEvent) throws IOException {
+        URL url3 = new URL("http://localhost:3000/users/logout");
+        connection.setUrl(url3);
+        String result = connection.sendAndReadHTTPGet();
+        System.out.println(result);
+        Main.root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Main.root.getStylesheets().add(Controller.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
     public void pressMenuDisplaySkull(ActionEvent actionEvent) throws IOException {
@@ -176,10 +193,35 @@ public class DisplayGender {
     public void pressMenuDirectory(ActionEvent actionEvent) {
     }
 
-    public void pressMenuUpload(ActionEvent actionEvent) {
+    public void pressMenuUpload(ActionEvent actionEvent) throws IOException {
+        Main.root = FXMLLoader.load(getClass().getResource("uploadMusic.fxml"));
+        Main.root.getStylesheets().add(UploadMusic.class.getResource("style.css").toExternalForm());
+        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
     }
 
     public void setGender(String gender) {
         this.gender = gender;
     }
+
+    private void addMenuItemAdmin() {
+        if (userIsAdmin.equals("1")){
+            System.out.println("admin");
+            System.out.println(profil_dynamo.getItems());
+            MenuItem adminPanel = new MenuItem("Administrator");
+            adminPanel.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    try{
+                        Main.root = FXMLLoader.load(getClass().getResource("administrator.fxml"));
+                        Main.root.getStylesheets().add(Administrator.class.getResource("style.css").toExternalForm());
+                        Main.primaryStage.setScene(new Scene(Main.root, 1024, 768));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            profil_dynamo.getItems().add(2,adminPanel);
+        }
+    }
+
 }

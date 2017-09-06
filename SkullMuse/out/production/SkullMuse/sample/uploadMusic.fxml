@@ -19,7 +19,7 @@
     <children>
         <MenuBar prefHeight="29.0" prefWidth="1024.0">
             <menus>
-                <Menu mnemonicParsing="false" onAction="#pressMenuProfile" text="Profile">
+                <Menu fx:id="profil_dynamo" mnemonicParsing="false" text="Profile">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#pressMenuEditProfile" text="Edit my profile" />
                         <MenuItem mnemonicParsing="false" onAction="#pressMenuDisconnect" text="Disconnect" />
@@ -81,7 +81,7 @@
             <Label text="Gender" GridPane.rowIndex="2" />
             <Button mnemonicParsing="false" onAction="#pressValidate" text="Validate" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="All fields must be fulled" GridPane.rowIndex="4" />
-            <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label GridPane.columnIndex="2" GridPane.rowIndex="4" text="" fx:id="label_error"/>
          </children>
       </GridPane>
     </children>

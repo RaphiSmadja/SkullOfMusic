@@ -14,6 +14,8 @@ const index = require('./routes/index');
 const users = require("./routes/users");
 const music = require("./routes/music");
 const likeUnlike = require("./routes/likeUnlike");
+const signalize = require("./routes/signalize");
+const heartStroke = require("./routes/heartStroke");
 
 const models = require("./models");
 models.sequelize.sync();
@@ -40,6 +42,8 @@ app.use('/', index);
 app.use("/users", users);
 app.use("/music", music);
 app.use("/likeUnlike", likeUnlike);
+app.use("/signalize", signalize);
+app.use("/heartStroke", heartStroke);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

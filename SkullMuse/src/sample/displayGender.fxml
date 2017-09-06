@@ -11,19 +11,19 @@
 <?import javafx.scene.text.Font?>
 <AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="sample.DisplayGender" prefHeight="400.0" prefWidth="600.0">
     <children>
-        <MenuBar fx:id="menubar" prefHeight="30.0" prefWidth="1024.0" style="-fx-background-color: #8A0829;">
+        <MenuBar fx:id="menubar" prefHeight="30.0" prefWidth="1024.0">
             <menus>
-                <Menu fx:id="testos" mnemonicParsing="false" text="Profile">
+                <Menu fx:id="profil_dynamo" mnemonicParsing="false" text="Profile">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#pressMenuEditProfile" style="-fx-background-color: #8A0829;" text="Edit my profile" />
-                        <MenuItem mnemonicParsing="false" onAction="#pressMenuDisconnect" style="-fx-background-color: #8A0829;" text="Disconnect" />
+                        <MenuItem mnemonicParsing="false" onAction="#pressMenuEditProfile" text="Edit my profile" />
+                        <MenuItem mnemonicParsing="false" onAction="#pressMenuDisconnect" text="Disconnect" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" onAction="#pressMenuDisconnect" text="Music">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#pressMenuDisplaySkull" style="-fx-background-color: #8A0829;" text="Home" />
-                        <MenuItem mnemonicParsing="false" onAction="#pressMenuDirectory" style="-fx-background-color: #8A0829;" text="My directory" />
-                        <MenuItem mnemonicParsing="false" onAction="#pressMenuUpload" style="-fx-background-color: #8A0829;" text="Upload music" />
+                        <MenuItem mnemonicParsing="false" onAction="#pressMenuDisplaySkull" text="Home" />
+                        <MenuItem mnemonicParsing="false" onAction="#pressMenuDirectory" text="My directory" />
+                        <MenuItem mnemonicParsing="false" onAction="#pressMenuUpload" text="Upload music" />
                     </items>
                 </Menu>
             </menus>
@@ -39,7 +39,7 @@
                         </Label>
                         <ScrollPane layoutX="12.0" layoutY="90.0" opacity="0.8" prefHeight="200.0" prefWidth="985.0" vbarPolicy="NEVER">
                             <content>
-                                <GridPane fx:id="grid_hits_gendek" gridLinesVisible="true" style="-fx-background-color: #F4FA58; -fx-alignment: center;">
+                                <GridPane fx:id="grid_hits_gendek" gridLinesVisible="true">
                                     <columnConstraints>
                                         <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="70.0" />
                                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
