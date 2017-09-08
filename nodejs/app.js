@@ -13,7 +13,7 @@ const http = require('http');
 const index = require('./routes/index');
 const users = require("./routes/users");
 const music = require("./routes/music");
-const likeUnlike = require("./routes/likeUnlike");
+const like = require("./routes/like");
 const signalize = require("./routes/signalize");
 const heartStroke = require("./routes/heartStroke");
 
@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use("/users", users);
 app.use("/music", music);
-app.use("/likeUnlike", likeUnlike);
+app.use("/like", like);
 app.use("/signalize", signalize);
 app.use("/heartStroke", heartStroke);
 

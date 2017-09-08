@@ -140,7 +140,8 @@
 
                                   </children>
                               </GridPane>
-                     </children></Pane>
+                     </children>
+                  </Pane>
                     </children>
                 </AnchorPane>
             </content>

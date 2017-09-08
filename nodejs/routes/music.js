@@ -7,6 +7,9 @@ const models = require("../models");
 const request = require("request");
 const Music = models.Music;
 const User = models.User;
+const Signalize = models.signalize;
+const Like = models.like;
+const HeartStroke = models.heartStroke;
 var multer  = require('multer')
 
 let sess;
@@ -101,20 +104,17 @@ router.post('/api/musics',upload, function (req, res) {
 });
 
 
-router.post("/search_by_gender", function(req, res, next) {
+router.get("/display_Allmusic", function(req, res) {
 	res.type("json");
-	sess = req.session;
+	sess = req.cookies;
 	if(!sess.emailAddress){
-		res.send({ msg: 'you are not connected so you can\'t search'});
+		res.send({ msg: 'you are not connected so you can\'t display'});
 	} else {
-		Music.findAll({
-			"where": {
-				      gender: req.body.gender
-				  }
-		}).then(musictype => {
-			if (musictype){
-				console.log("we find")
-				res.send({msg: musictype});
+		Music.findAll().then(allMusic => {
+			if (allMusic){
+				console.log("we find");
+				console.log(allMusic);
+				res.send({msg: allMusic});
 			}
 			else {
 				console.log("we don't find")
@@ -122,7 +122,7 @@ router.post("/search_by_gender", function(req, res, next) {
 			}
 		}).catch(err => { throw err; });
 	}
-})
+});
 
 //musique par genre de moins d'une semaine
 router.post("/search_by_gender_news", function(req, res, next) {
@@ -183,4 +183,90 @@ router.get("/display_music", function(req, res) {
 	}
 });
 
+/** directory **/
+
+router.get("/directory/display_music_added", function(req, res) {
+	sess = req.cookies;
+	console.log(sess.userId);
+	Music.findAll({
+		"where": {
+			ownerIdMusic: 5
+		}
+	}).then(displayEveryThingDirectory => {
+		if(displayEveryThingDirectory) {
+			res.send({msg: displayEveryThingDirectory});
+		} else {
+			res.send({
+				msg: "We don't find"
+			})
+		}
+	}).catch(err =>{
+		res.send({
+			msg: 'Unable to display list of music added',
+			err: err
+		});
+	});
+});
+
+router.get("/directory/display_music_liked", function(req, res) {
+	sess = req.cookies;
+	console.log(sess.userId);
+	Like.belongsTo(User,{foreignKey: 'likerId', targetKey: 'id'});
+	Like.belongsTo(Music,{foreignKey: 'musicId', targetKey: 'idMusic'});
+	Like.findAll({
+		"where": {
+			likerId: 5
+		},
+		include: [
+			{
+		    	model: Music,
+		    	attributes : ['title','artist','pathMusic','gender']
+	      	}
+	    ]
+	}).then(displayEveryThingDirectory => {
+		if(displayEveryThingDirectory) {
+			res.send({msg: displayEveryThingDirectory});
+		} else {
+			res.send({
+				msg: "We don't find"
+			})
+		}
+	}).catch(err =>{
+		res.send({
+			msg: 'Unable to display list of music liked',
+			err: err
+		});
+	});
+});
+
+router.get("/directory/display_music_heartstroke", function(req, res) {
+	sess = req.cookies;
+	console.log(sess.userId);
+	HeartStroke.belongsTo(User,{foreignKey: 'flagmanId', targetKey: 'id'});
+	HeartStroke.belongsTo(Music,{foreignKey: 'musicId', targetKey: 'idMusic'});
+	HeartStroke.findAll({
+		"where": {
+			flagmanId: 5
+		},
+		include: [
+			{
+		    	model: Music,
+		    	attributes : ['title','artist','pathMusic','gender']
+	      	}
+	    ]
+	}).then(displayEveryThingDirectoryStroke => {
+		if(displayEveryThingDirectoryStroke) {
+			res.send({msg: displayEveryThingDirectoryStroke});
+		} else {
+			res.send({
+				msg: "We don't find"
+			})
+		}
+	}).catch(err =>{
+		res.send({
+			msg: 'Unable to display list of music heart',
+			err: err
+		});
+	});
+});
 module.exports = router;

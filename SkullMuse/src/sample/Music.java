@@ -13,8 +13,6 @@ public class Music {
     MediaPlayer mp;
     Media media;
     public Music(Media media, MediaPlayer mp){
-        System.out.println("------------ " +mp);
-        System.out.println("************ " +media);
         this.mp = mp;
         this.media = media;
     }
@@ -36,8 +34,6 @@ public class Music {
     }
 
     protected void play_music(){
-
-        System.out.println("***********" + this.getClass().getResource("").toString());
         try {
             this.mp.play();
         } catch (Exception e){

@@ -49,10 +49,10 @@ public class Registration {
         JSONObject jsObj = new JSONObject(result);
         if (jsObj.get("msg").toString().equals("Success")) {
             label_res.setText(jsObj.get("msg").toString());
-            label_res.setTextFill(Color.web("#ff3300"));
+            label_res.setTextFill(Color.web("#00cc00"));
         } else {
             label_res.setText(jsObj.get("msg").toString());
-            label_res.setTextFill(Color.web("#00cc00"));
+            label_res.setTextFill(Color.web("#ff3300"));
         }
     }
 

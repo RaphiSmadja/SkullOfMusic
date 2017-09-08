@@ -69,3 +69,36 @@ Pane {
     -fx-background-color: #F4FA58;
     -fx-opacity:0.8;
 }
+#grid_conn {
+    -fx-background-color: #F4FA58;
+    -fx-opacity:0.8;
+    -fx-padding: 10px;
+}
+#grid_regist {
+    -fx-background-color: #F4FA58;
+    -fx-opacity:0.8;
+    -fx-padding: 10px;
+}
+#grid_editProfil {
+    -fx-background-color: #F4FA58;
+    -fx-opacity:0.8;
+    -fx-padding: 10px;
+}
+#display_muse_added{
+    -fx-opacity:0.8;
+}
+#display_muse_liked{
+    -fx-opacity:0.8;
+}
+#display_muse_heart{
+    -fx-opacity:0.8;
+}
+#grid_hits_added {
+    -fx-background-color: #F4FA58;
+}
+#grid_hits_liked {
+    -fx-background-color: #F4FA58;
+}
+#display_muse_heart {
+    -fx-background-color: #F4FA58;
+}

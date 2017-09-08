@@ -19,31 +19,38 @@ router.post("/signalize_music", function(req, res, next) {
 		res.json({ msg: 'you are not connected so you can\'t signalize music'});
 	} else {
 		Music.find({
-			"where": {
-				"idMusic": req.body.idMusic
+		"where": {
+				idMusic: req.body.idMusic
 			}
 		}).then(musica => {
-			if (musica) {
-				Signalize.create({
-					musicId: req.body.idMusic,
-					flagmanId: userid
-				}).then(signalizer => {
-					if (signalizer) {
-						res.send({msg: "Success"});
-					} else {
-						res.send({msg: "Fail"});
+			if (musica){
+				Signalize.find({
+				"where": {
+						musicId: req.body.idMusic,
+						flagmanId: userid
 					}
-				}).catch(err => {
-					res.send({err: err});
-				});
+				}).then(signal => {
+				if (signal){
+					Signalize.destroy({
+						"where": {
+							musicId: req.body.idMusic,
+							flagmanId: userid
+						}
+					})
+					res.send({ msg: 'signal destroy'});	
+				} else {
+					 return Signalize.create({
+							musicId : req.body.idMusic,
+							flagmanId: sess.userId
+						}).then(sign => {
+							res.send({msg: sign});
+						}).catch(err => { res.send({msg: 'nok', err: err}); });
+					}
+				}).catch(err => { throw err; });
 			} else {
-				res.send({
-					msg: "Music Not found"
-				});
+				res.send({ msg: 'the music chosen doesn\'t exist '});	
 			}
-		}).catch(err => {
-			res.send({msg: 'Unable to search music',err: err});
-		});
+		}).catch(err => { throw err; });
 	}
 });
 
@@ -80,4 +87,5 @@ router.get("/display_music_signalized", function(req, res) {
 		});
 	});
 });
+
 module.exports = router;

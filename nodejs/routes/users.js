@@ -66,9 +66,9 @@ router.post("/registration", function(req, res){
 	if (!validator.isEmail(mail1)) {
 		res.send({msg: "Error on email address"});
 	} else if(firstname1.length<3 || lastname1.length <3) {
-			res.send({msg: "Firstname or Lastname is too small (minimum 4)"});	
+			res.send({msg: "Error Firstname or Lastname"});	
 	} else if(password1.length<5 || password2.length <5) {
-			res.send({msg: "The password size must be greater than 5"});	
+			res.send({msg: "Error The password"});	
 	} else if(password1 != password2) {
 			res.send({msg: "The password aren't same"});	
 	} else {
@@ -291,6 +291,31 @@ router.post("/admin/deleteMusic", function(req, res) {
 		}).catch(err =>{
 			res.send({
 				msg: 'Unable to delete user',err: err
+			});
+		});
+	}
+});
+
+router.post("/admin/restUser", function(req, res) {
+	res.type("json");
+	sess = req.cookies;
+	if (sess.isAdmin != 1) {
+		res.send({ msg: "You are not admin" });
+	} else {
+		User.findOne({
+			"where": {
+				"emailAddress": req.body.email1
+			}
+		}).then(user => {
+			if(user) {
+					user.updateAttributes({
+						deletedAt: "NULL"
+					});
+					res.send({msg: "User is now not Admin"});
+				}
+		}).catch(err =>{
+			res.send({
+				msg: 'Unable to update information user',err: err
 			});
 		});
 	}

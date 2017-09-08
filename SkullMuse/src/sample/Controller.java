@@ -6,7 +6,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -22,6 +24,11 @@ import static javafx.application.Platform.exit;
 public class Controller {
     @FXML
     private Label checkServer;
+    @FXML
+    private Button btnConnect;
+    @FXML
+    private Button btnRegistration;
+
     public static boolean ping;
     /** static s'execute des l'instanciation controller **/
 
@@ -31,10 +38,11 @@ public class Controller {
     public void initialize() {
         if (!ping) {
             System.out.println(checkServer.getText());
-            checkServer.setText("Server is not launch ! ");
-            System.out.println("server is not launch " + ping);
+            checkServer.setText("SERVER IS NOT LAUNCH RETRY LATER !");
+            checkServer.setStyle("-fx-font: 25 arial;");
+            btnConnect.setVisible(false);
+            btnRegistration.setVisible(false);
         }
-        System.out.println("kdoeoked");
     }
     public void pressButtonRegistration(ActionEvent actionEvent) throws IOException {
         Main.root = FXMLLoader.load(getClass().getResource("registration.fxml"));

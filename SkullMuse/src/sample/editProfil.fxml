@@ -31,8 +31,8 @@
                 </Menu>
             </menus>
         </MenuBar>
-      <Label layoutX="14.0" layoutY="65.0" text="Edition Profil" />
-      <GridPane layoutX="14.0" layoutY="109.0" vgap="10" hgap="10">
+      <Label layoutX="459.0" layoutY="143.0" text="Edition Profil" />
+      <GridPane fx:id="grid_editProfil" hgap="10" layoutX="251.0" layoutY="249.0" prefWidth="500" vgap="10">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="175.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
